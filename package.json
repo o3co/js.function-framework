@@ -1,0 +1,18 @@
+{
+  "name": "@o3co/js.service-framework",
+  "version": "0.0-snapshot",
+  "description": "Process based flyweight framework",
+  "license": "MIT",
+  "author": "1o1-developer<develop@1o1.co.jp>",
+  "type": "module",
+  "main": "index.js",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "samples/*"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "make build"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "@o3co/sample.basic",
+  "version": "1.0.0",
+  "description": "",
+  "license": "MIT",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "biild": "make build",
+    "predebug": "make build",
+    "debug": "node src/handlers/NodeHandler.mjs",
+    "command": "node src/handlers/NodeHandler.mjs"
+  },
+  "exports": {
+    "./*": "./src/*"
+  },
+  "dependencies": {
+    "@o3co/js.service-framework.core": "*",
+    "@o3co/js.service-framework.node": "*",
+    "@o3co/js.util.storage": "0.3.*",
+    "file-type": "21.1.*",
+    "p-limit": "7.2.*"
+  }
+}

@@ -1,0 +1,42 @@
+# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
+
+name: Depublish Packages 
+    
+on:
+  release:
+    types: [deleted]
+
+jobs:
+  depublish-core:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - uses: o3co/github-action-unpublish-package@v1
+        with:
+          package-type: "npm"
+          version: ${{github.event.release.tag_name}}
+          name: "js.service-framework.core"
+          token: ${{secrets.GITHUB_TOKEN}}
+  depublish-node:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - uses: o3co/github-action-unpublish-package@v1
+        with:
+          package-type: "npm"
+          version: ${{github.event.release.tag_name}}
+          name: "js.service-framework.node"
+          token: ${{secrets.GITHUB_TOKEN}}
+  depublish-lambda:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - uses: o3co/github-action-unpublish-package@v1
+        with:
+          package-type: "npm"
+          version: ${{github.event.release.tag_name}}
+          name: "js.service-framework.lambda"
+          token: ${{secrets.GITHUB_TOKEN}}

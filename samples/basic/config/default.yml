@@ -1,0 +1,24 @@
+storages:  
+clients: 
+processes: null
+commands:
+  Echo:
+    representer: null
+  #  className: null
+  #  process: null
+  #  params:
+  #    message: null
+runtime:
+  command: null
+  response: pass 
+representers:
+  pass:
+    className: PassThruResponse 
+  json:
+    className: JsonResponse 
+    params:
+      pretty: true
+  apig_redirect:
+    className: null
+  apig:
+    className: null

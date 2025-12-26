@@ -1,0 +1,93 @@
+# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
+# For more information see: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
+
+name: Publish Packages
+
+on:
+  release:
+    types: [created,edited]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    env:
+      NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://npm.pkg.github.com/
+          scope: "@o3co"
+      - run: npm install
+      - run: make build
+
+  publish-core:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    env:
+      NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://npm.pkg.github.com/
+          scope: "@o3co"
+      - run: npm install
+      - run: npm version --no-git-tag-version ${{github.event.release.tag_name}}
+        working-directory: ./packages/core
+      - run: make build
+        working-directory: ./packages/core
+      - run: npm publish
+        working-directory: ./packages/core
+  publish-node:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    env:
+      NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://npm.pkg.github.com/
+          scope: "@o3co"
+      - run: npm install
+      - run: npm version --no-git-tag-version ${{github.event.release.tag_name}}
+        working-directory: ./packages/node
+      - run: make build
+        working-directory: ./packages/node
+      - run: npm publish
+        working-directory: ./packages/node
+  publish-lambda:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    env:
+      NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://npm.pkg.github.com/
+          scope: "@o3co"
+      - run: npm install
+      - run: npm version --no-git-tag-version ${{github.event.release.tag_name}}
+        working-directory: ./packages/lambda
+      - run: make build
+        working-directory: ./packages/lambda
+      - run: npm publish
+        working-directory: ./packages/lambda

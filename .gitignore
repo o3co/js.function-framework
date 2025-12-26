@@ -1,0 +1,26 @@
+# Node
+node_modules/
+yarn-debug.log*
+yarn-error.log*
+
+# TypeScript
+*.tsbuildinfo
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.*
+
+# macOS system files
+.DS_Store
+
+# Lock
+yarn.lock
+
+core/built/
+proto/built/
+
+
+package-lock.json

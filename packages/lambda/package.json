@@ -1,0 +1,29 @@
+{
+  "name": "@o3co/js.service-framework.lambda",
+  "license": "MIT",
+  "type": "module",
+  "private": false,
+  "version": "0.0.0-snapshot",
+  "packageManager": "yarn@1.22.22",
+  "scripts": {
+    "clean": "make clean",
+    "prebuild": "make clean",
+    "build": "tsc --build",
+    "typecheck": "tsc --noEmit"
+  },
+  "exports": {
+    "./*": "./built/*"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.x",
+    "tsx": "4.21.x",
+    "typescript": "5.9.x"
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "yarn": ">=1.22.22"
+  },
+  "dependencies": {
+    "deepmerge": "4.3.x"
+  }
+}

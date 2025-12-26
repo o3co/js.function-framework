@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "built",
+    "rootDir": "./src",
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "allowJs": true,
+    "checkJs": false,
+    "noImplicitAny": false,
+    "lib": ["es2022"]
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "built"]
+}
