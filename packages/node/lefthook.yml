@@ -1,0 +1,13 @@
+pre-commit:
+  parallel: true
+  jobs:
+    - root: packages/node
+      glob: packages/node/*.{js,ts,mjs,mts}
+      run: pnpm exec -y @biomejs/biome check --config-path ./biome.jsonc --write --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
+      stage_fixed: true
+    - root: packages/node
+      glob: packages/node/*.{js,ts,mjs,mts}
+      run: pnpm run typecheck
+      stage_fixed: true
+
+

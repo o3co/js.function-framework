@@ -3,7 +3,7 @@ PKGDIRS := $(shell find ./packages -type f -d 2 -name "Makefile" -exec dirname {
 .PHONY: install
 install:
 	lefthook install
-	npm install
+	pnpm install
 
 .PHONY: build
 build:
