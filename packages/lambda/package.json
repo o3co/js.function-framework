@@ -4,7 +4,7 @@
   "type": "module",
   "private": false,
   "version": "0.0.0-snapshot",
-  "packageManager": "yarn@1.22.22",
+  "packageManager": "pnpm@10.27.0",
   "scripts": {
     "clean": "make clean",
     "prebuild": "make clean",
@@ -20,8 +20,7 @@
     "typescript": "5.9.x"
   },
   "engines": {
-    "node": ">=22.0.0",
-    "yarn": ">=1.22.22"
+    "node": ">=22.0.0"
   },
   "dependencies": {
     "deepmerge": "4.3.x"
