@@ -1,5 +1,5 @@
 {
-  "name": "@o3co/js.service-framework.lambda",
+  "name": "@o3co/js.function-framework.lambda",
   "license": "MIT",
   "type": "module",
   "private": false,

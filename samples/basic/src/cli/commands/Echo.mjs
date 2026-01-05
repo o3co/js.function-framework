@@ -1,4 +1,4 @@
-import { Command as Base } from "@o3co/js.service-framework.node/cli/commands/Base.mjs";
+import { Command as Base } from "@o3co/js.function-framework.node/cli/commands/Base.mjs";
 
 /**
  */

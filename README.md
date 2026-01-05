@@ -1,2 +1,2 @@
-# js.service-framework
-JS process based flyweight service framework
+# js.function-framework
+JS process based flyweight Function framework

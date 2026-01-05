@@ -17,8 +17,8 @@
     "./*": "./src/*"
   },
   "dependencies": {
-    "@o3co/js.service-framework.core": "*",
-    "@o3co/js.service-framework.node": "*",
+    "@o3co/js.function-framework.core": "*",
+    "@o3co/js.function-framework.node": "*",
     "@o3co/js.util.storage": "0.3.*",
     "file-type": "21.1.*",
     "p-limit": "7.2.*"

@@ -31,7 +31,7 @@ export class Command extends Base {
       },
       {
         limit: this.params.parallelLimit ?? 1,
-      }
+      },
     );
   };
 

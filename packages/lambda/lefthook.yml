@@ -3,7 +3,7 @@ pre-commit:
   jobs:
     - root: packages/lambda
       glob: packages/lambda/*.{js,ts,mjs,mts}
-      run: pnpm exec -y @biomejs/biome check --config-path ./biome.jsonc --write --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
+      run: pnpx @biomejs/biome check --config-path ./biome.jsonc --write --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
       stage_fixed: true
     - root: packages/lambda
       glob: packages/lambda/*.{js,ts,mjs,mts}

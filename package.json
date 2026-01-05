@@ -1,5 +1,5 @@
 {
-  "name": "@o3co/js.service-framework",
+  "name": "@o3co/js.function-framework",
   "version": "0.0-snapshot",
   "description": "Process based flyweight framework",
   "license": "MIT",

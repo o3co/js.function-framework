@@ -22,8 +22,8 @@ export class Factory {
       config.className ??
         path.join(
           ...[process.env.npm_package_name, "processes", `${name}.mjs`].filter(
-            (v) => v
-          )
+            (v) => v,
+          ),
         )
     );
 

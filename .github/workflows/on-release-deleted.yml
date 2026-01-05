@@ -16,7 +16,7 @@ jobs:
         with:
           package-type: "npm"
           version: ${{github.event.release.tag_name}}
-          name: "js.service-framework.core"
+          name: "js.function-framework.core"
           token: ${{secrets.GITHUB_TOKEN}}
   depublish-node:
     runs-on: ubuntu-latest
@@ -27,7 +27,7 @@ jobs:
         with:
           package-type: "npm"
           version: ${{github.event.release.tag_name}}
-          name: "js.service-framework.node"
+          name: "js.function-framework.node"
           token: ${{secrets.GITHUB_TOKEN}}
   depublish-lambda:
     runs-on: ubuntu-latest
@@ -38,5 +38,5 @@ jobs:
         with:
           package-type: "npm"
           version: ${{github.event.release.tag_name}}
-          name: "js.service-framework.lambda"
+          name: "js.function-framework.lambda"
           token: ${{secrets.GITHUB_TOKEN}}

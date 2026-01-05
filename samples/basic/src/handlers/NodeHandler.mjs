@@ -1,4 +1,4 @@
-import { createHandler, CliCommandFactory  } from '@o3co/js.service-framework.node/handlers/NodeHandler.mjs'
+import { createHandler, CliCommandFactory  } from '@o3co/js.function-framework.node/handlers/NodeHandler.mjs'
 import { config, commandFactory } from '@o3co/sample.basic/util.mjs'
 
 const cliFactory = new CliCommandFactory({
