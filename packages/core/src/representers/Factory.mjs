@@ -1,4 +1,3 @@
-import fs from "node:fs/promises";
 import { deepMerge } from "@o3co/js.util.misc/merge.mjs";
 import defaultConfig from "./default.mjs";
 /**

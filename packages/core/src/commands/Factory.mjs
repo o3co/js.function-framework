@@ -1,4 +1,3 @@
-import fs from "node:fs/promises";
 import path from "node:path";
 
 /**
@@ -24,7 +23,7 @@ export class Factory {
         );
       try {
         return await import(this.pathResolver(classPath));
-      } catch (error) {
+      } catch (_cause) {
         return await import(`./SingleTaskCommand.mjs`);
       }
     })();
