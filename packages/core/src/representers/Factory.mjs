@@ -15,16 +15,20 @@ export class Factory {
       throw new Error(`Representer ${name} is not defined`);
     }
 
-    const { Representer } = await (async () => {
-      return await import(this.pathResolver(setting.classPath));
-    })();
+    try {
+      const { Representer } = await (async () => {
+        return await import(this.pathResolver(setting.classPath));
+      })();
 
-    const repr = new Representer({
-      ...setting,
-      ...params,
-      name,
-    });
+      const repr = new Representer({
+        ...setting,
+        ...params,
+        name,
+      });
 
-    return repr;
+      return repr;
+    } catch (cause) {
+      throw new Error(`Failed to import representer`, { cause });
+    }
   };
 }

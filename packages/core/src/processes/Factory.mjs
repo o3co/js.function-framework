@@ -20,24 +20,28 @@ export class Factory {
       clientFactory,
     };
 
-    const { Process } = await import(
-      this.pathResolver(
-        config.classPath ??
-          path.join(
-            ...[
-              process.env.npm_package_name,
-              "processes",
-              `${name}.mjs`,
-            ].filter((v) => v),
-          ),
-      )
-    );
+    try {
+      const { Process } = await import(
+        this.pathResolver(
+          config.classPath ??
+            path.join(
+              ...[
+                process.env.npm_package_name,
+                "processes",
+                `${name}.mjs`,
+              ].filter((v) => v),
+            ),
+        )
+      );
 
-    const proc = new Process(config);
+      const proc = new Process(config);
 
-    await proc.init();
+      await proc.init();
 
-    return proc;
+      return proc;
+    } catch (cause) {
+      throw new Error(`Failed to import Process`, { cause });
+    }
   };
 
   run = async (name, params) => {

@@ -36,7 +36,7 @@ export class Factory {
         const { Command } = await import(this.pathResolver(classPath));
 
         return Command;
-      } catch (cause) {
+      } catch (_cause) {
         //throw new Error(`Failed to import Command: ${classPath}`, { cause });
         //
         const { Command } = await import("./NoArgument.mjs");

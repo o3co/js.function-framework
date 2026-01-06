@@ -33,22 +33,26 @@ export class Factory {
     } = this.params;
 
     if (process.env.npm_package_name) {
-      const { Client: Component } = await import(
-        pathResolver(
-          params.classPath ??
-            path.join(
-              ...[
-                process.env.npm_package_name,
-                "clients",
-                `${name}.mjs`,
-              ].filter((v) => v),
-            ),
-        )
-      );
-      return new Component({
-        ...params,
-        storageFactory,
-      });
+      try {
+        const { Client: Component } = await import(
+          pathResolver(
+            params.classPath ??
+              path.join(
+                ...[
+                  process.env.npm_package_name,
+                  "clients",
+                  `${name}.mjs`,
+                ].filter((v) => v),
+              ),
+          )
+        );
+        return new Component({
+          ...params,
+          storageFactory,
+        });
+      } catch (cause) {
+        throw new Error(`Failed to import client`, { cause });
+      }
     }
 
     throw new Error(`Unspecified PackageManager: cannot resolve components`);
