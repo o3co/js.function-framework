@@ -1,5 +1,5 @@
 import type { Factory as StorageFactory } from "@o3co/js.util.storage/Factory.d.mts";
-import type { Client, ClientParams } from "./bases/Base.mts";
+import type { Client, ClientParams } from "./Base.mts";
 
 interface ClientDefinition {
   classPath?: string;
