@@ -1,10 +1,12 @@
 import fs from "node:fs/promises";
-
+import { deepMerge } from "@o3co/js.util.misc/merge.mjs";
+import defaultConfig from "./default.mjs";
 /**
  */
 export class Factory {
-  constructor({ representers }) {
-    this.representers = representers;
+  constructor({ pathResolver = import.meta.resolve, representers }) {
+    this.representers = deepMerge(defaultConfig, representers);
+    this.pathResolver = pathResolver;
   }
 
   create = async (name, params = {}) => {
@@ -15,11 +17,7 @@ export class Factory {
     }
 
     const { Representer } = await (async () => {
-      const classPath = `./${setting.className}.mjs`;
-
-      await fs.access(new URL(classPath, import.meta.url));
-
-      return await import(classPath);
+      return await import(this.pathResolver(setting.classPath));
     })();
 
     const repr = new Representer({

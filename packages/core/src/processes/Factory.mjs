@@ -3,8 +3,10 @@ import path from "node:path";
 /**
  */
 export class Factory {
-  constructor(config) {
+  constructor({ pathResolver = import.meta.resolve, ...config }) {
     this.config = config;
+
+    this.pathResolver = pathResolver;
   }
 
   create = async (name, params = {}) => {
@@ -19,12 +21,16 @@ export class Factory {
     };
 
     const { Process } = await import(
-      config.className ??
-        path.join(
-          ...[process.env.npm_package_name, "processes", `${name}.mjs`].filter(
-            (v) => v,
+      this.pathResolver(
+        config.classPath ??
+          path.join(
+            ...[
+              process.env.npm_package_name,
+              "processes",
+              `${name}.mjs`,
+            ].filter((v) => v),
           ),
-        )
+      )
     );
 
     const proc = new Process(config);

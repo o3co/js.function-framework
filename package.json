@@ -9,8 +9,7 @@
   "private": true,
   "packageManager": "pnpm@10.27.0",
   "workspaces": [
-    "packages/*",
-    "samples/*"
+    "packages/*"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

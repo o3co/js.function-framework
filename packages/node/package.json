@@ -14,6 +14,9 @@
   "exports": {
     "./*": "./built/*"
   },
+  "dependencies": {
+    "@o3co/js.util.misc": "0.4.*"
+  },
   "devDependencies": {
     "@types/node": "24.10.x",
     "tsx": "4.21.x",

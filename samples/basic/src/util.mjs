@@ -12,21 +12,25 @@ export * as PromiseHelper from "@o3co/js.util.promise/Helper.mjs";
  */
 export const processFactory = new ProcessFactory({
   clientFactory: new ClientFactory({
+    pathResolver: import.meta.resolve,
     clients: config.get("clients"),
     storageFactory: new StorageFactory(config.get("storages")),
   }),
+  pathResolver: import.meta.resolve,
   processes: config.get("processes"),
 });
 
 /**
  */
 export const representerFactory = new RepresenterFactory({
-  representers: config.get("representers"),
+  pathResolver: import.meta.resolve,
+  representers: config.has('representers') ? config.get("representers") : {},
 });
 
 /**
  */
 export const commandFactory = new CommandFactory({
+  pathResolver: import.meta.resolve,
   processFactory,
   representerFactory,
   commands: config.get("commands"),

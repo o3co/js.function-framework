@@ -4,13 +4,11 @@ export class Command {
   constructor({
     processFactory,
     name,
-    className,
     process,
     representer,
     representerFactory,
     params = {},
   }) {
-    this.className = className;
     this.commandName = name;
     this.processName = process ?? name;
     this.processFactory = processFactory;

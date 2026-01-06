@@ -1,11 +1,12 @@
 {
-  "name": "@o3co/sample.basic",
-  "version": "1.0.0",
+  "name": "@o3co/sample",
+  "version": "0.0.0",
   "description": "",
   "license": "MIT",
-  "author": "",
-  "type": "commonjs",
-  "main": "index.js",
+  "author": "1o1-developer<develop@1o1.co.jp>",
+  "type": "module",
+  "module": "src/handlers/NodeHandler.mjs",
+  "packageManager": "yarn@1.22.22",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "biild": "make build",
@@ -17,10 +18,13 @@
     "./*": "./src/*"
   },
   "dependencies": {
-    "@o3co/js.function-framework.core": "*",
-    "@o3co/js.function-framework.node": "*",
+    "@o3co/js.function-framework.core": "../../packages/core",
+    "@o3co/js.function-framework.node": "../../packages/node",
+    "@o3co/js.util.promise": "^0.4.2",
     "@o3co/js.util.storage": "0.3.*",
+    "config": "^4.1.1",
     "file-type": "21.1.*",
+    "js-yaml": "^4.1.1",
     "p-limit": "7.2.*"
   }
 }

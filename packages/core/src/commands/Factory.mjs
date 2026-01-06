@@ -1,10 +1,12 @@
 import fs from "node:fs/promises";
+import path from "node:path";
 
 /**
  */
 export class Factory {
-  constructor(params) {
+  constructor({ pathResolver = import.meta.resolve, ...params }) {
     this.params = params;
+    this.pathResolver = pathResolver;
   }
 
   create = async (name, params = {}) => {
@@ -13,17 +15,16 @@ export class Factory {
     const setting = commands?.[name] ?? {};
 
     const { Command } = await (async () => {
-      const classPath = setting.className
-        ? `./${setting.className}.mjs`
-        : `./${name}.mjs`;
-
+      const classPath =
+        setting.classPath ??
+        path.join(
+          ...[process.env.npm_package_name, "commands", `${name}.mjs`].filter(
+            (v) => v,
+          ),
+        );
       try {
-        await fs.access(new URL(classPath, import.meta.url));
-
-        return await import(classPath);
+        return await import(this.pathResolver(classPath));
       } catch (error) {
-        console.error(error);
-
         return await import(`./SingleTaskCommand.mjs`);
       }
     })();

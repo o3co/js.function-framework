@@ -1,5 +1,5 @@
-storages:  
-clients: 
+storages: null 
+clients: null
 processes: null
 commands:
   Echo:
@@ -11,14 +11,3 @@ commands:
 runtime:
   command: null
   response: pass 
-representers:
-  pass:
-    className: PassThruResponse 
-  json:
-    className: JsonResponse 
-    params:
-      pretty: true
-  apig_redirect:
-    className: null
-  apig:
-    className: null
