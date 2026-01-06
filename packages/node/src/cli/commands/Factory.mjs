@@ -4,9 +4,14 @@ import path from "node:path";
  * new Factory(config.get('cli'))
  */
 export class Factory {
-  constructor({ commandFactory, commands }) {
+  constructor({
+    commandFactory,
+    commands,
+    pathResolver = import.meta.resolve,
+  }) {
     this.commands = commands;
     this.commandFactory = commandFactory;
+    this.pathResolver = pathResolver;
   }
 
   /**
@@ -23,12 +28,12 @@ export class Factory {
           process.env.npm_package_name,
           "cli",
           "commands",
-          `${name}.mjs`
+          `${name}.mjs`,
         ),
       } = this.commands?.[name] ?? {};
 
       try {
-        const { Command } = await import(classPath);
+        const { Command } = await import(this.pathResolver(classPath));
 
         return Command;
       } catch (cause) {
