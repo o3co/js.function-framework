@@ -3,9 +3,14 @@ import path from "node:path";
 /**
  */
 export class Factory {
-  constructor({ pathResolver = import.meta.resolve, ...params }) {
+  constructor({
+    autoloadPkg = process.env.npm_package_name,
+    pathResolver = import.meta.resolve,
+    ...params
+  }) {
     this.params = params;
     this.pathResolver = pathResolver;
+    this.autoloadPkg = autoloadPkg;
   }
 
   create = async (name, params = {}) => {
@@ -17,9 +22,7 @@ export class Factory {
       const classPath =
         setting.classPath ??
         path.join(
-          ...[process.env.npm_package_name, "commands", `${name}.mjs`].filter(
-            (v) => v,
-          ),
+          ...[this.autoloadPkg, "commands", `${name}.mjs`].filter((v) => v),
         );
       try {
         return await import(this.pathResolver(classPath));

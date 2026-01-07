@@ -31,6 +31,7 @@ export const createHandler =
       ).run();
 
       console.log(ret);
+
       return ret;
     } catch (error) {
       console.error(error);

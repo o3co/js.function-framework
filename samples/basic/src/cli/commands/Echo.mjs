@@ -13,12 +13,14 @@ export class Command extends Base {
     };
   }
 
-  async doRun(_, positionals) {
+  async doRun({ format }, positionals) {
     const [_command, ...message] = positionals;
 
     const params = message.length ? { message: message.join(" ") } : {};
 
-    return await this.runCommand("Echo", params);
+    return await this.runCommand("Echo", {
+      ...params,
+      representer: format ?? "pass",
+    });
   }
 }
-

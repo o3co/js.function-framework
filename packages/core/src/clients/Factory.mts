@@ -10,6 +10,7 @@ interface ConstructorParams {
   pathResolver?: (string) => string;
   clients: Record<string, ClientDefinition>;
   storageFactory: StorageFactory;
+  autoloadPkg?: string;
 }
 
 /**
@@ -18,8 +19,11 @@ interface ConstructorParams {
 export class Factory {
   private params: ConstructorParams;
 
+  private autoloadPkg: string | undefined;
+
   constructor(params: ConstructorParams) {
     this.params = params;
+    this.autoloadPkg = params.autoloadPkg ?? process.env.npm_package_name;
   }
 
   /**
@@ -32,17 +36,15 @@ export class Factory {
       pathResolver = import.meta.resolve,
     } = this.params;
 
-    if (process.env.npm_package_name) {
+    if (this.autoloadPkg) {
       try {
         const { Client: Component } = await import(
           pathResolver(
             params.classPath ??
               path.join(
-                ...[
-                  process.env.npm_package_name,
-                  "clients",
-                  `${name}.mjs`,
-                ].filter((v) => v),
+                ...[this.autoloadPkg, "clients", `${name}.mjs`].filter(
+                  (v) => v,
+                ),
               ),
           )
         );

@@ -34,7 +34,7 @@ export class Command {
   /**
    */
   inputOptions() {
-    return {};
+    return null;
   }
 
   parseInput() {

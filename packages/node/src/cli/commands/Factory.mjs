@@ -8,10 +8,12 @@ export class Factory {
     commandFactory,
     commands,
     pathResolver = import.meta.resolve,
+    autoloadPkg = process.env.npm_package_name,
   }) {
     this.commands = commands;
     this.commandFactory = commandFactory;
     this.pathResolver = pathResolver;
+    this.autoloadPkg = autoloadPkg;
   }
 
   /**
@@ -25,7 +27,7 @@ export class Factory {
     const Command = await (async () => {
       const {
         classPath = path.join(
-          process.env.npm_package_name,
+          this.autoloadPkg,
           "cli",
           "commands",
           `${name}.mjs`,
@@ -37,8 +39,6 @@ export class Factory {
 
         return Command;
       } catch (_cause) {
-        //throw new Error(`Failed to import Command: ${classPath}`, { cause });
-        //
         const { Command } = await import("./NoArgument.mjs");
         return Command;
       }

@@ -3,10 +3,15 @@ import path from "node:path";
 /**
  */
 export class Factory {
-  constructor({ pathResolver = import.meta.resolve, ...config }) {
+  constructor({
+    autoloadPkg = process.env.npm_package_name,
+    pathResolver = import.meta.resolve,
+    ...config
+  }) {
     this.config = config;
 
     this.pathResolver = pathResolver;
+    this.autoloadPkg = autoloadPkg ?? process.env.npm_package_name;
   }
 
   create = async (name, params = {}) => {
@@ -25,11 +30,9 @@ export class Factory {
         this.pathResolver(
           config.classPath ??
             path.join(
-              ...[
-                process.env.npm_package_name,
-                "processes",
-                `${name}.mjs`,
-              ].filter((v) => v),
+              ...[this.autoloadPkg, "processes", `${name}.mjs`].filter(
+                (v) => v,
+              ),
             ),
         )
       );
