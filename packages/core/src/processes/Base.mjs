@@ -13,7 +13,10 @@ export class Process {
   }
 
   run = async (params) => {
-    return await this.doRun(params);
+    return await this.doRun({
+      ...(this.params.defaultParams ?? {}),
+      ...params,
+    });
   };
 
   /**
