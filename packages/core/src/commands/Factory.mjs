@@ -32,7 +32,7 @@ export class Factory {
         );
 
         // if file existed, then load the component
-        if (fs.existsSync(classPath)) {
+        if (fs.existsSync(new URL(classPath))) {
           return await import(classPath);
         } else {
           // otherwise, load SingleTaskCommand
