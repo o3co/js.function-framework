@@ -1,3 +1,4 @@
+import fs from "node:fs";
 import path from "node:path";
 
 /**
@@ -19,15 +20,24 @@ export class Factory {
     const setting = commands?.[name] ?? {};
 
     const { Command } = await (async () => {
-      const classPath =
-        setting.classPath ??
-        path.join(
-          ...[this.autoloadPkg, "commands", `${name}.mjs`].filter((v) => v),
+      // If classPath specified, then load the component
+      if (setting.classPath) {
+        return await import(this.pathResolver(setting.classPath));
+      } else {
+        // resolve autoload path
+        const classPath = this.pathResolver(
+          path.join(
+            ...[this.autoloadPkg, "commands", `${name}.mjs`].filter((v) => v),
+          ),
         );
-      try {
-        return await import(this.pathResolver(classPath));
-      } catch (_cause) {
-        return await import(`./SingleTaskCommand.mjs`);
+
+        // if file existed, then load the component
+        if (fs.existsSync(classPath)) {
+          return await import(classPath);
+        } else {
+          // otherwise, load SingleTaskCommand
+          return await import("./SingleTaskCommand.mjs");
+        }
       }
     })();
 
