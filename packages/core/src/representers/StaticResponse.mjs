@@ -14,7 +14,7 @@ export class Representer extends Base {
     super(params);
   }
 
-  doTransform(data) {
+  doTransform(_data) {
     return this.params.response;
   }
 }
