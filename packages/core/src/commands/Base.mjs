@@ -13,8 +13,17 @@ export class Command {
     this.processName = process ?? name;
     this.processFactory = processFactory;
     this.representerFactory = representerFactory;
-    this.representerName = representer;
     this.params = params;
+
+    if (typeof representer === "string") {
+      this.representerType = representer;
+      this.representerParams = {};
+    } else if (typeof representer === "object") {
+      const { type: repType = null, ...repParams } = representer;
+
+      this.representerType = repType;
+      this.representerParams = repParams;
+    }
   }
 
   /**
@@ -22,7 +31,8 @@ export class Command {
    */
   run = async (params = {}) => {
     const representer = await this.representerFactory.create(
-      this.representerName ?? "pass",
+      this.representerType ?? "pass",
+      this.representerParams,
     );
 
     try {

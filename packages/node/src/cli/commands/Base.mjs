@@ -4,22 +4,28 @@ import { parseArgs } from "node:util";
  */
 export class Command {
   constructor(params) {
-    this.params = params;
+    const { commandFactory, ...commandParams } = params;
+
+    this._commandFactory = commandFactory;
+    this.defaultCommandParams = commandParams;
   }
 
   get commandFactory() {
-    return this.params.commandFactory;
+    return this._commandFactory;
   }
 
   runCommand = async (name, params) => {
     return await (
       await this.commandFactory.create(name, {
-        ...this.commandParams,
+        ...this.defaultCommandParams,
+        ...Object.fromEntries(
+          Object.entries(this.commandParams).filter(([k, v]) => v),
+        ),
       })
     ).run(params);
   };
 
-  run = async ({ representer = "json", ...defaults } = {}) => {
+  run = async ({ representer, ...defaults } = {}) => {
     const { values = {}, positionals = [] } = this.parseInput();
 
     this.commandParams = {

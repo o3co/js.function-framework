@@ -1,7 +1,7 @@
 /**
  */
 export class Representer {
-  constructor({ params = {} } = {}) {
+  constructor(params = {}) {
     this.params = params;
   }
 

@@ -10,4 +10,6 @@ commands:
   #    message: null
 runtime:
   command: null
-  response: pass 
+  response: 
+    type: static 
+    response: '{"statusCode": 200}'

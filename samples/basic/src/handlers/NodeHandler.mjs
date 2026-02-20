@@ -10,6 +10,9 @@ const cliFactory = new CliCommandFactory({
 const handler = createHandler({
   config,
   cliFactory,
+  onComplete: (res) => {
+    console.log(res)
+  },
 })
 
 

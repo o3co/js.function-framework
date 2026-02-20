@@ -16,6 +16,10 @@ commands:
     #   - "json" 
     #   - "pass" 
     representer: pass 
+    # or
+    representer:
+        type: pass
+        ...params
 
     # Required
     # Description: name of process execute via command

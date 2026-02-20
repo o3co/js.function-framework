@@ -7,11 +7,11 @@ export { Factory as CliCommandFactory } from "@o3co/js.function-framework.node/c
 /**
  */
 export const createHandler =
-  ({ config, cliFactory }) =>
+  ({ config, cliFactory, onComplete = null, onError = null }) =>
   async () => {
     try {
       const settings = deepMerge(
-        { response: "json" },
+        { defaultResponse: "json" },
         config.has("runtime") ? config.get("runtime") : {},
       );
       const { positionals } = parseArgs({
@@ -26,15 +26,23 @@ export const createHandler =
 
       const ret = await (
         await cliFactory.create(positionals[0], {
-          representer: settings.response,
+          representer:
+            settings.representer ??
+            settings.response ??
+            settings.defaultResponse,
         })
       ).run();
 
-      console.log(ret);
+      if (onComplete) {
+        onComplete(ret);
+      }
 
       return ret;
-    } catch (error) {
-      console.error(error);
+    } catch (cause) {
+      if (onError) {
+        onError(cause);
+      }
+      console.error(cause);
       process.exit(1);
     }
   };

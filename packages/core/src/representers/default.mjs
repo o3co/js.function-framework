@@ -6,4 +6,8 @@ export default {
   json: {
     classPath: "@o3co/js.function-framework.core/representers/JsonResponse.mjs",
   },
+  static: {
+    classPath:
+      "@o3co/js.function-framework.core/representers/StaticResponse.mjs",
+  },
 };
