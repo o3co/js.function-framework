@@ -10,3 +10,7 @@ build:
 .PHONY: clean
 clean:
 	rm -rf built tsconfig.tsbuildinfo
+
+.PHONY: format
+format:
+	pnpm run format

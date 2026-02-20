@@ -9,7 +9,8 @@
     "clean": "make clean",
     "prebuild": "make clean",
     "build": "tsc --build",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "format": "pnpx @biomejs/biome check --config-path ./biome.jsonc --write --no-errors-on-unmatched --files-ignore-unknown=true src/*"
   },
   "exports": {
     "./*": "./built/*"

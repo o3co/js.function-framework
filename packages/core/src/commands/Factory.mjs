@@ -1,6 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
 
+import { ObjectHelper } from "@o3co/js.function-framework.core/Helpers.mjs";
+
 /**
  */
 export class Factory {
@@ -42,8 +44,8 @@ export class Factory {
     })();
 
     const command = new Command({
-      ...setting,
-      ...params,
+      ...ObjectHelper.cleanup(setting),
+      ...ObjectHelper.cleanup(params),
       processFactory,
       representerFactory,
       name,

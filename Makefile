@@ -11,3 +11,8 @@ build:
 		make -C $$subdir build;\
 	done
 
+.PHONY: format
+format:
+	@for subdir in $(PKGDIRS); do \
+		$(MAKE) -C $$subdir format;\
+	done

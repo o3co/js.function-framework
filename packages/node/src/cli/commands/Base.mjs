@@ -19,7 +19,7 @@ export class Command {
       await this.commandFactory.create(name, {
         ...this.defaultCommandParams,
         ...Object.fromEntries(
-          Object.entries(this.commandParams).filter(([k, v]) => v),
+          Object.entries(this.commandParams).filter(([_, v]) => v),
         ),
       })
     ).run(params);

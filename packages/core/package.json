@@ -9,15 +9,17 @@
     "clean": "make clean",
     "prebuild": "make clean",
     "build": "tsc --build",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "format": "pnpx @biomejs/biome check --config-path ./biome.jsonc --write --no-errors-on-unmatched --files-ignore-unknown=true src/*"
   },
   "exports": {
     "./*": "./built/*"
   },
   "dependencies": {
-    "@o3co/js.util.promise": "0.4.*",
-    "@o3co/js.util.storage": "0.4.*",
-    "config": "^4.1.1",
+    "@o3co/js.util.promise": "0.4.5",
+    "@o3co/js.util.storage": "0.4.5",
+    "@o3co/js.util.misc": "0.4.5",
+    "config": "^4.3.0",
     "js-yaml": "^4.1.1"
   },
   "devDependencies": {

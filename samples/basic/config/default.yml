@@ -3,13 +3,16 @@ clients: null
 processes: null
 commands:
   Echo:
-    representer: null
+    #representer: null
+    representer: 
+      type: static 
+      response: '{"statusCode": 200}'
   #  className: null
   #  process: null
   #  params:
   #    message: null
 runtime:
   command: null
-  response: 
-    type: static 
-    response: '{"statusCode": 200}'
+  #response: 
+  #  type: static 
+  #  response: '{"statusCode": 200}'
