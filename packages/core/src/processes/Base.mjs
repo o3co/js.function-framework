@@ -2,7 +2,7 @@
 /**
  */
 export class Process {
-  constructor({ clientFactory, params }) {
+  constructor({ clientFactory, ...params }) {
     this._clientFactory = clientFactory;
     this.params = params;
   }
