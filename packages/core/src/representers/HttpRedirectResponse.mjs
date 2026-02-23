@@ -7,7 +7,7 @@ export class Representer extends Base {
     //
     if (url) {
       return {
-        statusCode: 307,
+        statusCode: this.params.statusCode || 307,
         headers: {
           Location: url,
         },
