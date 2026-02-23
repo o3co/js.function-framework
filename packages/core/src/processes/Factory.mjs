@@ -20,9 +20,9 @@ export class Factory {
     const { clientFactory, processes } = this.config;
 
     const setting = processes?.[name] ?? {};
+
     const config = {
       ...setting,
-      defaultParams: setting.params ?? {},
       ...params,
       clientFactory,
     };
