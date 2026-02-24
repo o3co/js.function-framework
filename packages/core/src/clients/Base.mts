@@ -1,8 +1,6 @@
-export interface ClientParams extends Record<string, unknown> {}
-
 /**
  */
-export class Client<TParams extends ClientParams> {
+export class Client<TParams> {
   protected params: TParams;
 
   constructor(params: TParams) {
