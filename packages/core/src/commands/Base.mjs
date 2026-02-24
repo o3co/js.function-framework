@@ -5,7 +5,7 @@ export class Command {
     processFactory,
     name,
     process,
-    representer,
+    response,
     representerFactory,
     params = {},
   }) {
@@ -15,14 +15,14 @@ export class Command {
     this.representerFactory = representerFactory;
     this.params = params;
 
-    if (typeof representer === "string") {
-      this.representerType = representer;
-      this.representerParams = {};
-    } else if (typeof representer === "object") {
-      const { type: repType = null, ...repParams } = representer;
+    if (typeof response === "string") {
+      this.responseType = response;
+      this.responseParams = {};
+    } else if (typeof response === "object") {
+      const { type: resType = null, ...resParams } = response;
 
-      this.representerType = repType;
-      this.representerParams = repParams;
+      this.responseType = resType;
+      this.responseParams = resParams;
     }
   }
 
@@ -31,8 +31,8 @@ export class Command {
    */
   run = async (params = {}) => {
     const representer = await this.representerFactory.create(
-      this.representerType ?? "pass",
-      this.representerParams,
+      this.responseType ?? "pass",
+      this.responseParams,
     );
 
     try {

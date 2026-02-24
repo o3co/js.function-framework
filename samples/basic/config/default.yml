@@ -4,9 +4,9 @@ processes: null
 commands:
   Echo:
     #representer: null
-    representer: 
+    response: 
       type: static 
-      response: '{"statusCode": 200}'
+      return: '{"statusCode": 200}'
   #  className: null
   #  process: null
   #  params:

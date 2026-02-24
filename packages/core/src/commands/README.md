@@ -11,13 +11,13 @@ commands:
 
     # Optional:
     # Default: "pass"
-    # Description: type of representer.
+    # Description: type of response.
     # DefaultSupports:
     #   - "json" 
     #   - "pass" 
-    representer: pass 
+    response: pass 
     # or
-    representer:
+    response:
         type: pass
         ...params
 
