@@ -16,12 +16,16 @@
     "./*": "./built/*"
   },
   "dependencies": {
-    "@o3co/js.util.misc": "0.4.*"
+    "@o3co/js.util.misc": "0.4.9"
   },
   "devDependencies": {
-    "@types/node": "24.10.x",
-    "tsx": "4.21.x",
-    "typescript": "5.9.x"
+    "@o3co/js.function-framework.core": "*",
+    "@types/node": "24.10.4",
+    "tsx": "4.21.0",
+    "typescript": "5.9.3"
+  },
+  "peerDependencies": {
+    "@o3co/js.function-framework.core": "*"
   },
   "engines": {
     "node": ">=22.0.0",

@@ -1,6 +1,6 @@
 import { parseArgs } from "node:util";
 
-export { Factory as CliCommandFactory } from "@o3co/js.function-framework.node/cli/commands/Factory.mjs";
+export { Factory as CliCommandFactory } from "@o3co/js.function-framework.node/cli/command/Factory.mjs";
 
 /**
  */

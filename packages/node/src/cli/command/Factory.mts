@@ -1,19 +1,44 @@
 import path from "node:path";
+
+import type { Factory as CommandFactory } from "@o3co/js.function-framework.core/command/Factory.mjs";
+
+export type CommandConfig = {
+  classPath?: string;
+};
+
+export type ConstructorParams = {
+  commandFactory: CommandFactory;
+  commands: Record<string, CommandConfig>;
+  pathResolver?: (path: string) => string;
+  autoloadPkg?: string;
+};
+
 /**
  *
  * new Factory(config.get('cli'))
  */
 export class Factory {
+  protected commands: Record<string, CommandConfig>;
+  protected pathResolver: (path: string) => string;
+  protected autoloadPkg: string;
+  protected commandFactory: CommandFactory;
+
   constructor({
     commandFactory,
     commands,
     pathResolver = import.meta.resolve,
     autoloadPkg = process.env.npm_package_name,
-  }) {
+  }: ConstructorParams) {
     this.commands = commands;
     this.commandFactory = commandFactory;
-    this.pathResolver = pathResolver;
-    this.autoloadPkg = autoloadPkg;
+    this.pathResolver = pathResolver ?? import.meta.resolve;
+    const tmpPkg = autoloadPkg ?? process.env.npm_package_name;
+    if (!tmpPkg) {
+      throw new Error(
+        `Failed to resolve "process.env.npm_package_name" for autoloading commands`,
+      );
+    }
+    this.autoloadPkg = tmpPkg;
   }
 
   /**
@@ -23,7 +48,7 @@ export class Factory {
    *  (3. Fallback with NoArgument)
    *
    */
-  create = async (name, params = {}) => {
+  create = async (name: string, params: Record<string, unknown> = {}) => {
     const Command = await (async () => {
       const {
         classPath = path.join(
@@ -48,6 +73,7 @@ export class Factory {
       return new Command({
         ...params,
         //Command: name,
+        name,
         commandFactory: this.commandFactory,
       });
     } catch (cause) {

@@ -16,10 +16,10 @@
     "./*": "./built/*"
   },
   "dependencies": {
-    "@o3co/js.util.promise": "0.4.5",
-    "@o3co/js.util.storage": "0.4.5",
-    "@o3co/js.util.misc": "0.4.5",
-    "config": "^4.3.0",
+    "@o3co/js.util.misc": "0.4.*",
+    "@o3co/js.util.promise": "0.4.*",
+    "@o3co/js.util.storage": "0.4.*",
+    "config": "^4.4.0",
     "js-yaml": "^4.1.1"
   },
   "devDependencies": {

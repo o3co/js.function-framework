@@ -14,5 +14,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "make build"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.4",
+    "@types/node": "24.10.4"
   }
 }

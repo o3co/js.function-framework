@@ -2,3 +2,7 @@ packages:
   - "packages/*"
   #- "samples/*"
 
+overrides:
+  "@o3co/js.function-framework.core": "workspace:*"
+  "@o3co/js.function-framework.node": "workspace:*"
+  "@o3co/js.function-framework.lambda": "workspace:*"

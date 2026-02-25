@@ -16,14 +16,17 @@
     "./*": "./built/*"
   },
   "devDependencies": {
-    "@types/node": "24.10.x",
-    "tsx": "4.21.x",
-    "typescript": "5.9.x"
+    "@types/node": "24.10.13",
+    "tsx": "4.21.0",
+    "typescript": "5.9.3"
   },
   "engines": {
     "node": ">=22.0.0"
   },
   "dependencies": {
-    "deepmerge": "4.3.x"
+    "@o3co/js.function-framework.core": "^0.2.4",
+    "@o3co/js.util.promise": "0.4.8",
+    "@types/aws-lambda": "^8.10.160",
+    "deepmerge": "4.3.1"
   }
 }

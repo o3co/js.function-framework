@@ -3,33 +3,60 @@ import path from "node:path";
 
 import { ObjectHelper } from "@o3co/js.function-framework.core/Helpers.mjs";
 
+export type ConstructorParams = {
+  autoloadPkg?: string;
+  pathResolver?: (string) => string;
+} & Record<string, unknown>;
+
 /**
  */
 export class Factory {
+  protected params: Record<string, unknown>;
+
+  protected pathResolver: (string) => string;
+
+  protected autoloadPkg: string | undefined;
+
   constructor({
     autoloadPkg = process.env.npm_package_name,
     pathResolver = import.meta.resolve,
     ...params
-  }) {
+  }: ConstructorParams) {
     this.params = params;
     this.pathResolver = pathResolver;
     this.autoloadPkg = autoloadPkg;
   }
 
-  create = async (name, params = {}) => {
+  create = async (
+    name: string,
+    params: Record<string, unknown> = {},
+  ): Promise<any> => {
     const { processFactory, representerFactory, commands } = this.params;
 
     const setting = commands?.[name] ?? {};
 
     const { Command } = await (async () => {
       // If classPath specified, then load the component
-      if (setting.classPath) {
-        return await import(this.pathResolver(setting.classPath));
+      if (setting.type) {
+        switch (setting.type) {
+          case "SingleTask":
+            return await import("./SingleTaskCommand.mjs");
+          case "SequentialTasks":
+            return await import("./SequentialTasksCommand.mjs");
+          case "ParallelTasks":
+            return await import("./ParallelTasksCommand.mjs");
+          default:
+            // otherwise, load the component from type as classPath
+            return await import(this.pathResolver(setting.type));
+        }
       } else {
-        // resolve autoload path
+        // if type is not specified, then try to load the component from autoloadPkg with command name
         const classPath = this.pathResolver(
           path.join(
-            ...[this.autoloadPkg, "commands", `${name}.mjs`].filter((v) => v),
+            ...[this.autoloadPkg, "commands", `${name}.mjs`].filter(
+              (v): v is Exclude<string, undefined> =>
+                (v ?? undefined) !== undefined,
+            ),
           ),
         );
 
@@ -52,11 +79,5 @@ export class Factory {
     });
 
     return command;
-  };
-
-  run = async (name, params) => {
-    const command = await this.create(name);
-
-    return await command.run(params);
   };
 }
