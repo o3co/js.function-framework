@@ -1,6 +1,5 @@
 import path from "node:path";
 import type { Factory as StorageFactory } from "@o3co/js.util.storage/Factory.d.mts";
-import type { Client } from "./Base.mts";
 
 interface ClientDefinition {
   classPath?: string;
@@ -29,7 +28,7 @@ export class Factory {
   /**
    * クライアントを生成
    */
-  async create(name: string): Promise<Client<unknown>> {
+  async create<TClient>(name: string): Promise<TClient> {
     const {
       storageFactory,
       clients: { [name]: params = {} },
@@ -51,7 +50,7 @@ export class Factory {
         return new Component({
           ...params,
           storageFactory,
-        });
+        }) as TClient;
       } catch (cause) {
         throw new Error(`Failed to import client`, { cause });
       }
