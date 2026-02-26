@@ -10,7 +10,8 @@
     "prebuild": "make clean",
     "build": "tsc --build",
     "typecheck": "tsc --noEmit",
-    "format": "pnpx @biomejs/biome check --config-path ./biome.jsonc --write --no-errors-on-unmatched --files-ignore-unknown=true src/*"
+    "format": "pnpx @biomejs/biome check --config-path ./biome.jsonc --write --no-errors-on-unmatched --files-ignore-unknown=true src/*",
+    "test": "pnpx vitest run --config ./vitest.config.mjs"
   },
   "exports": {
     "./*": "./built/*"
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "@types/node": "24.10.4",
+    "vitest": "^1.0.0",
     "typescript": "5.9.3"
   },
   "engines": {

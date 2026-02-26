@@ -14,3 +14,7 @@ clean:
 .PHONY: format
 format:
 	pnpm run format
+
+.PHONY: test
+test:
+	pnpx vitest run
