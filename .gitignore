@@ -19,8 +19,4 @@ yarn-error.log*
 # Lock
 yarn.lock
 
-core/built/
-proto/built/
-
-
 package-lock.json

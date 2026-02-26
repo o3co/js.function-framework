@@ -1,2 +1,9 @@
-src
+.gitignore
+.npmignore
+Makefile
+biome.json
+lefthook.yml
 node_modules
+src
+tsconfig.json
+tsconfig.tsbuildinfo

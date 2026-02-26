@@ -1,4 +1,4 @@
-PKGDIRS := $(shell find ./packages -type f -d 2 -name "Makefile" -exec dirname {} \;)
+PKGDIRS := $(shell find "./packages" -type f -d 2 -name "Makefile" -exec dirname "{}" \;)
 
 .PHONY: install
 install:
