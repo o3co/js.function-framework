@@ -1,7 +1,9 @@
-import { deepMerge } from "@o3co/js.util.misc/merge.mjs";
-import type { RepresenterConstructionParams } from "./Base.mjs";
-import defaultConfig from "./default.mjs";
-//import type { Partial } from "@o3co/js.util.type/Partial.mts";
+import { deepMerge } from "@o3co/js.util.misc/types/object/Helper.mjs";
+import type {
+  Representer,
+  ConstructionParams as RepresenterConstructionParams,
+} from "./Base.mjs";
+import defaultRepresenters from "./default.mjs";
 
 /**
  */
@@ -16,17 +18,16 @@ export class Factory {
     pathResolver?: (path: string) => string;
     representers?: Record<string, RepresenterConstructionParams>;
   }) {
-    this.representers = deepMerge(defaultConfig, representers) as Record<
-      string,
-      RepresenterConstructionParams
-    >;
+    this.representers = deepMerge<
+      Record<string, RepresenterConstructionParams>
+    >(defaultRepresenters, representers ?? {});
     this.pathResolver = pathResolver;
   }
 
-  create = async <CP extends Partial<RepresenterConstructionParams>>(
+  create = async <TParams extends Partial<RepresenterConstructionParams>>(
     name: string,
-    params: CP,
-  ): Promise<any> => {
+    params: TParams,
+  ): Promise<Representer> => {
     const setting = this.representers?.[name];
 
     if (!setting) {
@@ -42,7 +43,7 @@ export class Factory {
         ...setting,
         ...params,
         name,
-      });
+      }) as Representer;
 
       return repr;
     } catch (cause) {

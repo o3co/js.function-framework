@@ -1,19 +1,20 @@
 import {
   Representer as Base,
-  type RepresenterConstructionParams,
-  type RepresenterParams,
+  type ConstructionParams,
   type Response,
+  type TransformParams,
 } from "./Base.mjs";
 
-export type HttpConstructionParams = RepresenterConstructionParams;
+export type HttpConstructionParams = ConstructionParams;
 
-export type HttpParams = RepresenterParams;
+export type HttpParams = TransformParams;
 
 /**
  */
 export type HttpResponse = Response & {
   statusCode: number;
   body: unknown;
+  headers?: Record<string, string>;
 };
 
 export class Representer extends Base<HttpConstructionParams, HttpParams> {
@@ -24,10 +25,17 @@ export class Representer extends Base<HttpConstructionParams, HttpParams> {
     };
   }
 
-  doTransformError(cause: Error): HttpResponse {
+  doTransformError(cause: unknown): HttpResponse {
+    if (cause instanceof Error) {
+      return {
+        statusCode: 500,
+        body: cause.message,
+      };
+    }
     return {
       statusCode: 500,
-      body: cause.message,
+      //body: String(cause),
+      body: "Internal Server Error",
     };
   }
 }

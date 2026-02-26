@@ -1,15 +1,15 @@
 import {
   Representer as Base,
-  type RepresenterConstructionParams,
-  type RepresenterParams,
+  type ConstructionParams,
   type Response,
+  type TransformParams,
 } from "./Base.mjs";
 
-export type JsonConstructionParams = RepresenterConstructionParams & {
+export type JsonConstructionParams = ConstructionParams & {
   pretty?: boolean;
 };
 
-export type JsonParams = RepresenterParams;
+export type JsonParams = TransformParams;
 
 /**
  * Return JSON String

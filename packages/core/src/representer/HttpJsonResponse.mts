@@ -1,13 +1,8 @@
-import {
-  Representer as Base,
-  type RepresenterConstructionParams,
-  RepresenterParams,
-  Response,
-} from "./Base.mjs";
+import { Representer as Base, type ConstructionParams } from "./Base.mjs";
 import type { HttpResponse } from "./HttpResponse.mts";
 import type { JsonParams } from "./JsonResponse.mts";
 
-export type HttpJsonConstructionParams = RepresenterConstructionParams & {
+export type HttpJsonConstructionParams = ConstructionParams & {
   pretty?: boolean;
 };
 
@@ -26,10 +21,19 @@ export class Representer extends Base<
     };
   }
 
-  doTransformError(cause: Error): HttpResponse {
+  doTransformError(cause: Representer): HttpResponse {
+    if (cause instanceof Error) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ code: 500, error: cause.message }),
+      };
+    }
     return {
       statusCode: 500,
-      body: JSON.stringify({ code: 500, error: cause.message }),
+      body: JSON.stringify({
+        code: 500,
+        //error: String(cause),
+      }),
     };
   }
 }

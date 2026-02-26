@@ -1,17 +1,14 @@
 import {
   Representer as Base,
-  type RepresenterConstructionParams,
-  type RepresenterParams,
+  type ConstructionParams,
   type Response,
+  type TransformParams,
 } from "./Base.mjs";
 
 /**
  */
-export class Representer extends Base<
-  RepresenterConstructionParams,
-  RepresenterParams
-> {
-  doTransform(data: RepresenterParams): Response {
+export class Representer extends Base<ConstructionParams, TransformParams> {
+  doTransform(data: TransformParams): Response {
     return data;
   }
 }

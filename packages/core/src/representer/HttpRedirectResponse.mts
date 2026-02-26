@@ -1,16 +1,16 @@
 import { Representer as Base } from "./Base.mjs";
 import type {
-  HttpJsonConstructionParams,
-  HttpJsonParams,
-} from "./HttpJsonResponse.mjs";
-import type { HttpResponse } from "./HttpResponse.mjs";
+  HttpConstructionParams,
+  HttpParams,
+  HttpResponse,
+} from "./HttpResponse.mjs";
 /**
  */
-export type HttpRedirectConstructionParams = HttpJsonConstructionParams & {
+export type HttpRedirectConstructionParams = HttpConstructionParams & {
   statusCode?: number;
 };
 
-export type HttpRedirectParams = HttpJsonParams & {
+export type HttpRedirectParams = HttpParams & {
   url?: string;
 };
 
@@ -42,7 +42,7 @@ export class Representer extends Base<
     }
   }
 
-  doTransformError(_cause: Error): HttpResponse {
+  doTransformError(_cause: unknown): HttpResponse {
     return {
       statusCode: 500,
       body: JSON.stringify({ code: 500, error: `Bad URL to redirect` }),

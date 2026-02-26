@@ -1,20 +1,20 @@
 import {
   Representer as Base,
-  type RepresenterConstructionParams,
-  type RepresenterParams,
+  type ConstructionParams,
   type Response,
+  type TransformParams,
 } from "./Base.mjs";
 
 /**
  * Return Static Response
  */
-export type StaticConstructionParams = RepresenterConstructionParams & {
+export type StaticConstructionParams = ConstructionParams & {
   return: string;
 };
 
 export class Representer extends Base<
   StaticConstructionParams,
-  RepresenterParams
+  TransformParams
 > {
   constructor(params: StaticConstructionParams) {
     if (!params.return) {
@@ -25,7 +25,7 @@ export class Representer extends Base<
     super(params);
   }
 
-  doTransform(_data: RepresenterParams): Response {
+  doTransform(_data: TransformParams): Response {
     return this.params.return;
   }
 }

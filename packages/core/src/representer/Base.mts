@@ -2,41 +2,41 @@
 //   [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
 // };
 
-export type RepresenterConstructionParams = {
+export type ConstructionParams = {
   classPath: string;
 };
 
-export type RepresenterParams = any;
+export type TransformParams = unknown;
 
-export type Response = any;
+export type Response = unknown;
 
 /**
  */
 export class Representer<
-  CP extends RepresenterConstructionParams,
-  P extends RepresenterParams,
+  TConstructorParams extends ConstructionParams = ConstructionParams,
+  TTransformParams extends TransformParams = TransformParams,
 > {
-  protected params: CP;
+  protected params: TConstructorParams;
 
   //
-  constructor(params: CP = {} as CP) {
+  constructor(params: TConstructorParams = {} as TConstructorParams) {
     this.params = params;
   }
 
-  transform = (params: P): Response => {
+  transform = (params: TTransformParams): Response => {
     return this.doTransform(params);
   };
 
-  doTransform(_params: P): Response {
+  doTransform(_params: TTransformParams): Response {
     //
     throw new Error("NotYetImpl");
   }
 
-  transformError = (cause: Error): Response => {
+  transformError = (cause: unknown): Response => {
     return this.doTransformError(cause);
   };
 
-  doTransformError(cause: Error): Response {
+  doTransformError(cause: unknown): Response {
     //
     throw cause;
   }
