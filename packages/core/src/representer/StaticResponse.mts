@@ -17,12 +17,13 @@ export class Representer extends Base<
   TransformParams
 > {
   constructor(params: StaticConstructionParams) {
+    super(params);
+
     if (!params.return) {
       throw new Error(
         'Config "return" is not specified for static representer',
       );
     }
-    super(params);
   }
 
   doTransform(_data: TransformParams): Response {
