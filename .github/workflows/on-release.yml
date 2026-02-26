@@ -54,7 +54,7 @@ jobs:
       - run: pnpm publish --no-git-checks
         working-directory: ./packages/core
   publish-node:
-    needs: build
+    needs: publish-core
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -72,7 +72,6 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: "@o3co"
       - run: pnpm install
-      - run: pnpm update
       - run: pnpm version --no-commit-hooks --allow-same-version --no-git-tag-version --no-workspaces-update ${{github.event.release.tag_name}}
         working-directory: ./packages/node
       - run: make build
@@ -80,7 +79,7 @@ jobs:
       - run: pnpm publish --no-git-checks
         working-directory: ./packages/node
   publish-lambda:
-    needs: build
+    needs: publish-core
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -98,7 +97,6 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: "@o3co"
       - run: pnpm install
-      - run: pnpm update
       - run: pnpm version --no-commit-hooks --allow-same-version --no-git-tag-version --no-workspaces-update ${{github.event.release.tag_name}}
         working-directory: ./packages/lambda
       - run: make build
