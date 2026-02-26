@@ -72,6 +72,7 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: "@o3co"
       - run: pnpm install
+      - run: pnpm update
       - run: pnpm version --no-commit-hooks --allow-same-version --no-git-tag-version --no-workspaces-update ${{github.event.release.tag_name}}
         working-directory: ./packages/node
       - run: make build
@@ -97,6 +98,7 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: "@o3co"
       - run: pnpm install
+      - run: pnpm update
       - run: pnpm version --no-commit-hooks --allow-same-version --no-git-tag-version --no-workspaces-update ${{github.event.release.tag_name}}
         working-directory: ./packages/lambda
       - run: make build
