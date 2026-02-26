@@ -50,7 +50,7 @@ jobs:
       - run: pnpm version --no-commit-hooks --allow-same-version --no-git-tag-version --no-workspaces-update ${{github.event.release.tag_name}}
         working-directory: ./packages/core
       - run: make build
-        working-directory: ./packages/core
+        working-directory: ./
       - run: pnpm publish --no-git-checks
         working-directory: ./packages/core
   publish-node:
@@ -75,7 +75,7 @@ jobs:
       - run: pnpm version --no-commit-hooks --allow-same-version --no-git-tag-version --no-workspaces-update ${{github.event.release.tag_name}}
         working-directory: ./packages/node
       - run: make build
-        working-directory: ./packages/node
+        working-directory: ./
       - run: pnpm publish --no-git-checks
         working-directory: ./packages/node
   publish-lambda:
@@ -100,6 +100,6 @@ jobs:
       - run: pnpm version --no-commit-hooks --allow-same-version --no-git-tag-version --no-workspaces-update ${{github.event.release.tag_name}}
         working-directory: ./packages/lambda
       - run: make build
-        working-directory: ./packages/lambda
+        working-directory: ./
       - run: pnpm publish --no-git-checks
         working-directory: ./packages/lambda
