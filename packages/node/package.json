@@ -19,7 +19,7 @@
     "@o3co/js.util.misc": "0.5.0"
   },
   "devDependencies": {
-    "@o3co/js.function-framework.core": "0.5.*",
+    "@o3co/js.function-framework.core": "workspace:*",
     "@types/node": "24.10.4",
     "tsx": "4.21.0",
     "typescript": "5.9.3"

@@ -20,13 +20,13 @@
     "@o3co/js.util.misc": "0.5.0",
     "@o3co/js.util.promise": "0.5.0",
     "@o3co/js.util.storage": "0.5.0",
-    "config": "^4.4.0",
+    "config": "^4.4.1",
     "js-yaml": "^4.1.1"
   },
   "devDependencies": {
     "@types/node": "24.10.4",
-    "vitest": "^1.0.0",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "vitest": "^1.6.1"
   },
   "engines": {
     "node": ">=22.0.0"

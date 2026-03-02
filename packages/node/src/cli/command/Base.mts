@@ -9,7 +9,7 @@ export type ConstructorParams = {
 
 /**
  */
-export class Command {
+export class Command<DoRunOptions extends {} = Record<string, unknown>> {
   protected name: string;
 
   protected _commandFactory: CommandFactory;
@@ -40,7 +40,7 @@ export class Command {
   run = async () => {
     const { values = {}, positionals = [] } = this.parseInput();
 
-    return await this.doRun(values, positionals);
+    return await this.doRun(values as DoRunOptions, positionals);
   };
 
   /**
@@ -48,10 +48,7 @@ export class Command {
    * @param _options
    * @param _positionals
    */
-  protected async doRun(
-    _options: Record<string, unknown>,
-    _positionals: string[],
-  ) {
+  protected async doRun(_options: DoRunOptions, _positionals: string[]) {
     throw new Error("Not implemented");
   }
 
@@ -62,22 +59,21 @@ export class Command {
     return null;
   }
 
-  private parseInput() {
+  private parseInput(): {
+    values: {};
+    positionals: string[];
+  } {
     const options = this.inputOptions();
 
     if (options) {
-      parseArgs({
+      const { values, positionals } = parseArgs({
         ...options,
         strict: true,
         args: process.argv.slice(2),
         allowPositionals: true,
       });
-      return parseArgs({
-        ...options,
-        strict: true,
-        args: process.argv.slice(2),
-        allowPositionals: true,
-      });
+
+      return { values, positionals };
     }
 
     return { values: {}, positionals: [] };
