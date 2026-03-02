@@ -12,13 +12,13 @@ import type {
 export type CreateHandleParams = {
   config: Map<string, unknown>;
   commandFactory: CommandFactory;
-  onComplete?: (result: unknown) => void;
-  onError?: (error: unknown) => void;
+  onError?: (error: unknown) => Promise<void> | void;
+  onComplete?: (result: unknown) => Promise<void> | void;
 };
 
 const DefaultHandleParams = {
-  onComplete: (_result) => {},
-  onError: (error) => {
+  onComplete: async (_result) => {},
+  onError: async (error) => {
     console.error("Error occurs:", error);
   },
 };
@@ -189,10 +189,10 @@ export const createHandler = ({
         })
       )();
 
-      onComplete?.(response);
+      await onComplete?.(response);
       return response;
     } catch (error) {
-      onError?.(error);
+      await onError?.(error);
 
       throw error;
     }

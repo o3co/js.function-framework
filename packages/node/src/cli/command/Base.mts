@@ -26,7 +26,7 @@ export class Command {
   }
 
   runCommand = async (
-    name,
+    name: string,
     runParams?: Record<string, unknown>,
     constructionParams?: Record<string, unknown>,
   ) => {
@@ -58,7 +58,7 @@ export class Command {
   /**
    * Override to provide options for parsing input
    */
-  protected inputOptions(): Record<string, any> | null {
+  protected inputOptions(): Record<string, unknown> | null {
     return null;
   }
 

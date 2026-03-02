@@ -15,15 +15,15 @@ import type {
 export type CreateHandleParams = {
   config: Map<string, unknown>;
   commandFactory: CommandFactory;
-  onComplete?: (result: unknown) => void;
-  onError?: (error: unknown) => void;
+  onComplete?: (result: unknown) => Promise<void> | void;
+  onError?: (error: unknown) => Promise<void> | void;
 };
 
 const DefaultHandleParams = {
-  onComplete: (result) => {
+  onComplete: async (result) => {
     console.log("S3EventHandler completed with result:", result);
   },
-  onError: (error) => {
+  onError: async (error) => {
     console.error("S3EventHandler encountered an error:", error);
   },
 };
@@ -141,10 +141,10 @@ export const createHandler = ({
     try {
       const ret = await handleEventOrSnsMessage(event);
 
-      onComplete?.(ret);
+      await onComplete?.(ret);
       return ret;
     } catch (error) {
-      onError?.(error);
+      await onError?.(error);
 
       throw error;
     }

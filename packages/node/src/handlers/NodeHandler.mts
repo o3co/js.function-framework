@@ -1,6 +1,5 @@
 import { parseArgs } from "node:util";
 import type { Factory as CliCommandFactory } from "@o3co/js.function-framework.node/cli/command/Factory.mjs";
-import { string } from "@o3co/js.util.misc/types/index.mjs";
 
 export type CreateHandlerOptions = {
   config: {
@@ -8,8 +7,8 @@ export type CreateHandlerOptions = {
     get: (key: string) => unknown;
   };
   cliFactory: CliCommandFactory;
-  onComplete?: (result: any) => void;
-  onError?: (error: unknown) => void;
+  onComplete?: (result: unknown) => Promise<void> | void;
+  onError?: (error: unknown) => Promise<void> | void;
 };
 /**
  */
@@ -49,13 +48,13 @@ export const createHandler =
       ).run();
 
       if (onComplete) {
-        onComplete(ret);
+        await onComplete(ret);
       }
 
       return ret;
     } catch (cause) {
       if (onError) {
-        onError(cause);
+        await onError(cause);
       }
       console.error(cause);
       process.exit(1);
