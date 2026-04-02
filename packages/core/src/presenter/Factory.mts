@@ -3,33 +3,33 @@ import type {
   Presenter,
   PresenterFactory as IPresenterFactory,
 } from "../interfaces.mjs";
-import type { ConstructionParams as PresenterConstructionParams } from "./Base.mjs";
+import type { ConstructorParams as PresenterConstructorParams } from "./Base.mjs";
 import defaultPresenters from "./default.mjs";
 
 export type ConstructorParams = {
   pathResolver?: (path: string) => string;
-  presenters?: Record<string, PresenterConstructionParams>;
+  presenters?: Record<string, PresenterConstructorParams>;
 };
 
 /**
  * Factory class for creating presenter instances
  */
 export class Factory implements IPresenterFactory {
-  presenters: Record<string, PresenterConstructionParams>;
+  presenters: Record<string, PresenterConstructorParams>;
   pathResolver: (path: string) => string;
 
   constructor({
     pathResolver = import.meta.resolve,
     presenters = {},
   }: ConstructorParams) {
-    this.presenters = deepMerge<Record<string, PresenterConstructionParams>>(
+    this.presenters = deepMerge<Record<string, PresenterConstructorParams>>(
       defaultPresenters,
       presenters,
     );
     this.pathResolver = pathResolver;
   }
 
-  create = async <TParams extends Partial<PresenterConstructionParams>>(
+  create = async <TParams extends Partial<PresenterConstructorParams>>(
     name: string,
     params: TParams = {} as TParams,
   ): Promise<Presenter> => {
@@ -55,7 +55,7 @@ export class Factory implements IPresenterFactory {
 
       return presenter;
     } catch (cause) {
-      throw new Error(`Failed to import presenter`, { cause });
+      throw new Error(`Failed to import presenter "${name}"`, { cause });
     }
   };
 }

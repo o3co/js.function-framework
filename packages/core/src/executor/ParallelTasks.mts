@@ -18,7 +18,7 @@ export class ParallelTasksExecutor extends BaseMultiTasksExecutor<ConstructorPar
   }
 
   async doRun(params: ProcessRunParams): Promise<unknown> {
-    return await PromiseHelper.runParallel<any, any>(
+    return await PromiseHelper.runParallel(
       this.processes,
       async (process) => {
         return await (

@@ -72,7 +72,6 @@ export class Factory {
     try {
       return new Command({
         ...params,
-        //Command: name,
         name,
         executorFactory: this.executorFactory,
       });

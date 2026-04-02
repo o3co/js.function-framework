@@ -1,7 +1,5 @@
 import { Command as Base } from "./Base.mjs";
 
-/**
- */
 export class Command extends Base<Record<string, unknown>> {
   protected inputOptions() {
     return null;

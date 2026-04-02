@@ -1,7 +1,7 @@
-import { BasePresenter, type ConstructionParams } from "./Base.mjs";
+import { BasePresenter, type ConstructorParams } from "./Base.mjs";
 import type { Response } from "../interfaces.mjs";
 
-export type HttpConstructionParams = ConstructionParams & Record<string, unknown>;
+export type HttpConstructorParams = ConstructorParams & Record<string, unknown>;
 
 export type HttpParams = unknown;
 
@@ -11,7 +11,7 @@ export type HttpResponse = Response & {
   headers?: Record<string, string>;
 };
 
-export class Presenter extends BasePresenter<HttpConstructionParams, HttpParams> {
+export class Presenter extends BasePresenter<HttpConstructorParams, HttpParams> {
   doTransform(body: HttpParams): HttpResponse {
     return {
       statusCode: 200,

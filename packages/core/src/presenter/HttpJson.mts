@@ -1,13 +1,13 @@
-import { BasePresenter, type ConstructionParams } from "./Base.mjs";
+import { BasePresenter, type ConstructorParams } from "./Base.mjs";
 import type { HttpResponse } from "./Http.mjs";
 
-export type HttpJsonConstructionParams = ConstructionParams & {
+export type HttpJsonConstructorParams = ConstructorParams & {
   pretty?: boolean;
 };
 
 type HttpJsonParams = unknown;
 
-export class Presenter extends BasePresenter<HttpJsonConstructionParams, HttpJsonParams> {
+export class Presenter extends BasePresenter<HttpJsonConstructorParams, HttpJsonParams> {
   doTransform(body: HttpJsonParams): HttpResponse {
     return {
       statusCode: 200,

@@ -20,9 +20,7 @@ export type CreateHandleParams = {
 };
 
 const DefaultHandleParams = {
-  onComplete: async (result) => {
-    console.log("S3EventHandler completed with result:", result);
-  },
+  onComplete: async (_result) => {},
   onError: async (error) => {
     console.error("S3EventHandler encountered an error:", error);
   },
@@ -73,7 +71,7 @@ export const createHandler = ({
       record: S3EventRecord | SQSRecord | SNSEventRecord,
     ) => {
       const isSNSRecord = (record: any): record is SNSEventRecord => {
-        return record?.EventSource === "aws:sns" || Boolean(typeof record?.Sns);
+        return record?.EventSource === "aws:sns" || record?.Sns != null;
       };
 
       if (isSNSRecord(record)) {
@@ -87,8 +85,6 @@ export const createHandler = ({
         );
       }
     };
-    /**
-     */
     const handleRecordForS3OrSQS = async (
       record: S3EventRecord | SQSRecord,
     ) => {
@@ -136,8 +132,6 @@ export const createHandler = ({
       });
     };
 
-    // -----------------------------------------------------------------------------------------------
-    // actual handler logic
     try {
       const ret = await handleEventOrSnsMessage(event);
 

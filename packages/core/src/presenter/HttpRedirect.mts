@@ -1,7 +1,7 @@
 import { BasePresenter } from "./Base.mjs";
-import type { HttpConstructionParams, HttpResponse, HttpParams } from "./Http.mjs";
+import type { HttpConstructorParams, HttpResponse, HttpParams } from "./Http.mjs";
 
-export type HttpRedirectConstructionParams = HttpConstructionParams & {
+export type HttpRedirectConstructorParams = HttpConstructorParams & {
   statusCode?: number;
 };
 
@@ -9,7 +9,7 @@ export type HttpRedirectParams = HttpParams & {
   url?: string;
 };
 
-export class Presenter extends BasePresenter<HttpRedirectConstructionParams, HttpRedirectParams> {
+export class Presenter extends BasePresenter<HttpRedirectConstructorParams, HttpRedirectParams> {
   doTransform(params: HttpRedirectParams): HttpResponse {
     const { url } = params;
     if (url) {
