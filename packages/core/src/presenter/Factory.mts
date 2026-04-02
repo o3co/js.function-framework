@@ -41,7 +41,7 @@ export class Factory implements IPresenterFactory {
 
     try {
       const mod = await import(this.pathResolver(setting.classPath));
-      const PresenterClass = mod.BasePresenter ?? mod.Presenter ?? mod.Representer;
+      const PresenterClass = mod.Presenter ?? mod.Representer;
 
       if (!PresenterClass) {
         throw new Error(`Module does not export Presenter or Representer`);

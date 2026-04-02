@@ -10,7 +10,7 @@ export function resolveModulePath(
   name: string,
 ): string {
   return pathResolver(
-    path.join(
+    path.posix.join(
       ...[autoloadPkg, category, `${name}.mjs`].filter((v): v is string => v != null),
     ),
   );

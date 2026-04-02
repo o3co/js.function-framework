@@ -50,7 +50,7 @@ export class Factory implements ITaskFactory {
           : resolveModulePath(this.pathResolver, this.autoloadPkg, "tasks", name)
       );
 
-      const TaskClass = mod.BaseTask ?? mod.Task ?? mod.Process;
+      const TaskClass = mod.Task ?? mod.Process;
       if (!TaskClass) {
         throw new Error(`Module does not export Task or Process`);
       }
