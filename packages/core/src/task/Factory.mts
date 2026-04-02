@@ -41,7 +41,7 @@ export class Factory implements ITaskFactory {
       clientFactory: this.clientFactory,
     };
 
-    const classPath = typeof config.classPath === 'string' ? config.classPath : undefined;
+    const classPath = typeof config.classPath === "string" ? config.classPath : undefined;
 
     try {
       const mod = await import(

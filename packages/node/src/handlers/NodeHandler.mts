@@ -4,6 +4,7 @@ import type { Factory as CliCommandFactory } from "@o3co/js.function-framework.n
 export type CreateHandlerOptions = {
   config: {
     runtime?: {
+      command?: string;
       response?: string | ({ type?: string } & Record<string, unknown>);
       responseParams?: Record<string, unknown>;
     };
