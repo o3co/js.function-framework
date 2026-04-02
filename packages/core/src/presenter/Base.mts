@@ -36,7 +36,3 @@ export class BasePresenter<
     throw cause;
   }
 }
-
-// Re-export for backward compat
-export { BasePresenter as Presenter };
-export { BasePresenter as Representer };

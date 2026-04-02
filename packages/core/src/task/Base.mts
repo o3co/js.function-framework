@@ -42,7 +42,3 @@ export class BaseTask<
     throw new Error("doRun method must be implemented by subclass");
   }
 }
-
-// Re-export for backward compat — consumer code exports { Process }
-export { BaseTask as Task };
-export { BaseTask as Process };

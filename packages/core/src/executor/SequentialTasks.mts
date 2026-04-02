@@ -18,6 +18,3 @@ export class SequentialTasksExecutor extends BaseMultiTasksExecutor<ConstructorP
     });
   }
 }
-
-// Re-export for backward compat
-export { SequentialTasksExecutor as Command };

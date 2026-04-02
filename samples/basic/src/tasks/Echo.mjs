@@ -1,9 +1,9 @@
 //@ts-check
-import { Process as Base } from "@o3co/js.function-framework.core/task/Base.mjs";
+import { BaseTask as Base } from "@o3co/js.function-framework.core/task/Base.mjs";
 
 /**
  */
-export class Process extends Base {
+export class Task extends Base {
   async doRun({ message }) {
     if (!message) {
       throw new Error("No message provided");

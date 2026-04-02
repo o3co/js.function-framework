@@ -32,6 +32,3 @@ export class ParallelTasksExecutor extends BaseMultiTasksExecutor<ConstructorPar
     );
   }
 }
-
-// Re-export for backward compat
-export { ParallelTasksExecutor as Command };

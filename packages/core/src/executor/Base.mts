@@ -74,6 +74,3 @@ export class BaseExecutor<TConstructorParams extends ConstructorParams>
     throw new Error("doRun method must be implemented by subclass");
   }
 }
-
-// Re-export for backward compat
-export { BaseExecutor as Command };

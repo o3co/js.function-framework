@@ -1,4 +1,4 @@
-import path from "node:path";
+import { resolveModulePath } from "@o3co/js.function-framework.core/Helpers.mjs";
 import type { Client, ClientFactory as IClientFactory } from "../interfaces.mjs";
 import type { ClientConfig } from "../config/schema.mjs";
 
@@ -31,14 +31,9 @@ export class Factory implements IClientFactory {
     if (this.autoloadPkg) {
       try {
         const { Client: Component } = await import(
-          pathResolver(
-            clientDef.classPath ??
-              path.join(
-                ...[this.autoloadPkg, "clients", `${name}.mjs`].filter(
-                  (v) => v,
-                ),
-              ),
-          )
+          clientDef.classPath
+            ? pathResolver(clientDef.classPath)
+            : resolveModulePath(pathResolver, this.autoloadPkg, "clients", name)
         );
         return new Component({
           ...clientDef,

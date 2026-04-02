@@ -41,7 +41,7 @@ export const createHandler = ({
   ) => {
     const parseBody = (
       event: APIGatewayProxyEvent | APIGatewayProxyEventV2,
-    ): any => {
+    ): unknown => {
       const temp =
         event.body && event.isBase64Encoded
           ? Buffer.from(event.body, "base64").toString("utf-8")
@@ -133,7 +133,7 @@ export const createHandler = ({
     };
 
     const handleRequest = async (request: {
-      body: any;
+      body: unknown;
       queryParams: Record<string, string[]>;
       headers: Record<string, string[]>;
     }) => {
@@ -144,7 +144,7 @@ export const createHandler = ({
           response: config.get("runtime.response") as string | ResponseConfig,
         })
       ).run({
-        ...request.body,
+        ...(request.body as Record<string, unknown>),
         ...request.queryParams,
       });
     };

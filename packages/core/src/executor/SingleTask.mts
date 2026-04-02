@@ -23,6 +23,3 @@ export class SingleTaskExecutor extends BaseExecutor<ConstructorParams> {
     ).run({ ...this.params, ...params });
   }
 }
-
-// Re-export for backward compat — ExecutorFactory looks for { Command }
-export { SingleTaskExecutor as Command };
