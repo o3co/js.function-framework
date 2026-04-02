@@ -18,8 +18,8 @@ export const createHandler =
   ({
     config,
     cliFactory,
-    onComplete = undefined,
-    onError = undefined,
+    onComplete = async (_result: unknown) => {},
+    onError = async (_error: unknown) => {},
   }: CreateHandlerOptions) =>
   async () => {
     try {
