@@ -1,33 +1,28 @@
 import * as PromiseHelper from "@o3co/js.util.misc/async/index.mjs";
-
 import {
-  Command as Base,
+  BaseMultiTasksExecutor,
   type ConstructorParams as BaseConstructorParams,
   type ProcessRunParams,
-} from "./BaseMultiTasksCommand.mjs";
+} from "./BaseMultiTasks.mjs";
 
 export type ConstructorParams = BaseConstructorParams & {
   numOfThreads?: number;
 };
 
-/**
- */
-export class Command extends Base<ConstructorParams> {
+export class ParallelTasksExecutor extends BaseMultiTasksExecutor<ConstructorParams> {
   protected numOfThreads: number;
 
-  /**
-   */
   constructor(params: ConstructorParams) {
     super(params);
     this.numOfThreads = params.numOfThreads ?? 5;
   }
 
-  async doRun(params: ProcessRunParams): Promise<any> {
+  async doRun(params: ProcessRunParams): Promise<unknown> {
     return await PromiseHelper.runParallel<any, any>(
       this.processes,
       async (process) => {
         return await (
-          await this.processFactory.create(process.process ?? this.commandName)
+          await this.taskFactory.create(process.process ?? this.executorName)
         ).run({ ...(process.params ?? {}), ...params });
       },
       {
@@ -37,3 +32,6 @@ export class Command extends Base<ConstructorParams> {
     );
   }
 }
+
+// Re-export for backward compat
+export { ParallelTasksExecutor as Command };

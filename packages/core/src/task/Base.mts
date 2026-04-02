@@ -1,15 +1,19 @@
-import type { Factory as ClientFactory } from "../client/Factory.mjs";
+import type { Task, ClientFactory } from "../interfaces.mjs";
 
 export type ConstructorParams = {
   clientFactory: ClientFactory;
 } & Record<string, unknown>;
 
+export type TaskRunParams = Record<string, unknown>;
+
 /**
+ * Base class for all tasks.
+ * Subclasses must override doRun() with business logic.
  */
-export class Process<
+export class BaseTask<
   TRunParams extends object = Record<string, unknown>,
   TResult = unknown,
-> {
+> implements Task<TRunParams, TResult> {
   private _clientFactory: ClientFactory;
 
   protected params: Record<string, unknown>;
@@ -20,18 +24,13 @@ export class Process<
   }
 
   async init(): Promise<void> {
-    // Initialization logic can be implemented here
+    // Override for initialization logic
   }
 
   get clientFactory(): ClientFactory {
     return this._clientFactory;
   }
 
-  /**
-   *
-   * @param params - Parameters for the process execution
-   * @returns
-   */
   run = async (params: TRunParams): Promise<TResult> => {
     return await this.doRun({
       ...(this.params ?? {}),
@@ -39,10 +38,11 @@ export class Process<
     });
   };
 
-  /**
-   * @returns {Promise<any>}
-   */
   async doRun(_params: TRunParams): Promise<TResult> {
     throw new Error("doRun method must be implemented by subclass");
   }
 }
+
+// Re-export for backward compat — consumer code exports { Process }
+export { BaseTask as Task };
+export { BaseTask as Process };

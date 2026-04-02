@@ -1,13 +1,13 @@
 import path from "node:path";
 
-import type { Factory as CommandFactory } from "@o3co/js.function-framework.core/command/Factory.mjs";
+import type { Factory as ExecutorFactory } from "@o3co/js.function-framework.core/executor/Factory.mjs";
 
 export type CommandConfig = {
   classPath?: string;
 };
 
 export type ConstructorParams = {
-  commandFactory: CommandFactory;
+  executorFactory: ExecutorFactory;
   commands: Record<string, CommandConfig>;
   pathResolver?: (path: string) => string;
   autoloadPkg?: string;
@@ -21,16 +21,16 @@ export class Factory {
   protected commands: Record<string, CommandConfig>;
   protected pathResolver: (path: string) => string;
   protected autoloadPkg: string;
-  protected commandFactory: CommandFactory;
+  protected executorFactory: ExecutorFactory;
 
   constructor({
-    commandFactory,
+    executorFactory,
     commands,
     pathResolver = import.meta.resolve,
     autoloadPkg = process.env.npm_package_name,
   }: ConstructorParams) {
     this.commands = commands;
-    this.commandFactory = commandFactory;
+    this.executorFactory = executorFactory;
     this.pathResolver = pathResolver ?? import.meta.resolve;
     const tmpPkg = autoloadPkg ?? process.env.npm_package_name;
     if (!tmpPkg) {
@@ -74,7 +74,7 @@ export class Factory {
         ...params,
         //Command: name,
         name,
-        commandFactory: this.commandFactory,
+        executorFactory: this.executorFactory,
       });
     } catch (cause) {
       throw new Error("Failed to create Command", { cause });

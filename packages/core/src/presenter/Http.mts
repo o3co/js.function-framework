@@ -1,23 +1,17 @@
-import {
-  Representer as Base,
-  type ConstructionParams,
-  type Response,
-  type TransformParams,
-} from "./Base.mjs";
+import { BasePresenter, type ConstructionParams } from "./Base.mjs";
+import type { Response } from "../interfaces.mjs";
 
-export type HttpConstructionParams = ConstructionParams;
+export type HttpConstructionParams = ConstructionParams & Record<string, unknown>;
 
-export type HttpParams = TransformParams;
+export type HttpParams = unknown;
 
-/**
- */
 export type HttpResponse = Response & {
   statusCode: number;
   body: unknown;
   headers?: Record<string, string>;
 };
 
-export class Representer extends Base<HttpConstructionParams, HttpParams> {
+export class Presenter extends BasePresenter<HttpConstructionParams, HttpParams> {
   doTransform(body: HttpParams): HttpResponse {
     return {
       statusCode: 200,
@@ -34,7 +28,6 @@ export class Representer extends Base<HttpConstructionParams, HttpParams> {
     }
     return {
       statusCode: 500,
-      //body: String(cause),
       body: "Internal Server Error",
     };
   }

@@ -1,10 +1,10 @@
 import { parseArgs } from "node:util";
 
-import type { Factory as CommandFactory } from "@o3co/js.function-framework.core/command/Factory.mjs";
+import type { Factory as ExecutorFactory } from "@o3co/js.function-framework.core/executor/Factory.mjs";
 
 export type ConstructorParams = {
   name: string;
-  commandFactory: CommandFactory;
+  executorFactory: ExecutorFactory;
 };
 
 /**
@@ -12,17 +12,17 @@ export type ConstructorParams = {
 export class Command<DoRunOptions extends {} = Record<string, unknown>> {
   protected name: string;
 
-  protected _commandFactory: CommandFactory;
+  protected _executorFactory: ExecutorFactory;
 
   constructor(params: ConstructorParams) {
-    const { commandFactory } = params;
+    const { executorFactory } = params;
 
     this.name = params.name;
-    this._commandFactory = commandFactory;
+    this._executorFactory = executorFactory;
   }
 
-  get commandFactory(): CommandFactory {
-    return this._commandFactory;
+  get executorFactory(): ExecutorFactory {
+    return this._executorFactory;
   }
 
   runCommand = async (
@@ -33,7 +33,7 @@ export class Command<DoRunOptions extends {} = Record<string, unknown>> {
     const { format = null } = constructionParams ?? {};
 
     return await (
-      await this.commandFactory.create(name, constructionParams)
+      await this.executorFactory.create(name, constructionParams)
     ).run(runParams);
   };
 
@@ -48,7 +48,7 @@ export class Command<DoRunOptions extends {} = Record<string, unknown>> {
    * @param _options
    * @param _positionals
    */
-  protected async doRun(_options: DoRunOptions, _positionals: string[]) {
+  protected async doRun(_options: DoRunOptions, _positionals: string[]): Promise<unknown> {
     throw new Error("Not implemented");
   }
 
