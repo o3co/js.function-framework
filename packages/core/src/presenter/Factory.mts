@@ -3,8 +3,14 @@ import type {
   Presenter,
   PresenterFactory as IPresenterFactory,
 } from "../interfaces.mjs";
+import type { PresenterConfig } from "../config/schema.mjs";
 import type { ConstructionParams as PresenterConstructionParams } from "./Base.mjs";
 import defaultPresenters from "./default.mjs";
+
+export type ConstructorParams = {
+  pathResolver?: (path: string) => string;
+  presenters?: Record<string, PresenterConfig>;
+};
 
 /**
  * Factory class for creating presenter instances
@@ -15,14 +21,11 @@ export class Factory implements IPresenterFactory {
 
   constructor({
     pathResolver = import.meta.resolve,
-    presenters,
-  }: {
-    pathResolver?: (path: string) => string;
-    presenters?: Record<string, PresenterConstructionParams>;
-  }) {
+    presenters = {},
+  }: ConstructorParams) {
     this.presenters = deepMerge<Record<string, PresenterConstructionParams>>(
       defaultPresenters,
-      presenters ?? {},
+      presenters as Record<string, PresenterConstructionParams>,
     );
     this.pathResolver = pathResolver;
   }
