@@ -1,5 +1,7 @@
 import path from "node:path";
 
+import type { ClientFactory as IClientFactory } from "../interfaces.mjs";
+
 interface ClientDefinition {
   classPath?: string;
 }
@@ -14,7 +16,7 @@ interface ConstructorParams {
 /**
  * Factory class for creating client instances
  */
-export class Factory {
+export class Factory implements IClientFactory {
   private params: ConstructorParams;
 
   private autoloadPkg: string | undefined;
