@@ -48,7 +48,7 @@ export class Command<DoRunOptions extends {} = Record<string, unknown>> {
    * @param _options
    * @param _positionals
    */
-  protected async doRun(_options: DoRunOptions, _positionals: string[]) {
+  protected async doRun(_options: DoRunOptions, _positionals: string[]): Promise<unknown> {
     throw new Error("Not implemented");
   }
 
