@@ -59,8 +59,7 @@ export class Factory implements IExecutorFactory {
         const classPath = this.pathResolver(
           path.join(
             ...[this.autoloadPkg, "commands", `${name}.mjs`].filter(
-              (v): v is Exclude<string, undefined> =>
-                (v ?? undefined) !== undefined,
+              (v): v is string => v != null,
             ),
           ),
         );
@@ -75,7 +74,7 @@ export class Factory implements IExecutorFactory {
 
     const ExecutorClass = mod.Executor ?? mod.Command;
     if (!ExecutorClass) {
-      throw new Error(`Module does not export Executor or Command`);
+      throw new Error(`Module for executor "${name}" does not export Executor or Command`);
     }
 
     const executor = new ExecutorClass({

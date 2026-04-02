@@ -14,23 +14,21 @@ export type CreateHandlerOptions = {
   onComplete?: (result: unknown) => Promise<void> | void;
   onError?: (error: unknown) => Promise<void> | void;
 };
-/**
- */
 export const createHandler =
   ({
     config,
     cliFactory,
-    onComplete = undefined,
-    onError = undefined,
+    onComplete = async (_result: unknown) => {},
+    onError = async (_error: unknown) => {},
   }: CreateHandlerOptions) =>
   async () => {
     try {
       const runtimeSettings = config.runtime ?? {};
 
       const { positionals } = parseArgs({
-        strict: false, //未定義の引数を許可
-        args: process.argv.slice(2), //コマンドライン引数を取得
-        allowPositionals: true, //オプション（--xxx）以外の引数も許可
+        strict: false,
+        args: process.argv.slice(2),
+        allowPositionals: true,
       });
 
       if (positionals.length < 1) {

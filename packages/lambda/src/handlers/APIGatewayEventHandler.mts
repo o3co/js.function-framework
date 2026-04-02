@@ -154,7 +154,7 @@ export const createHandler = ({
         throw new Error("No records found in the event");
       }
 
-      PromiseHelper.runSeq(event.Records, async (record) => {
+      return PromiseHelper.runSeq(event.Records, async (record) => {
         switch (record.eventSource) {
           case "aws:sqs":
             return await handleSQSRecord(record as SQSRecord);
@@ -174,7 +174,6 @@ export const createHandler = ({
       }
     };
 
-    // ------------------------------------------------------------------------------------------------
     try {
       const response = (
         await (async () => {

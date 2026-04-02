@@ -1,7 +1,7 @@
 // ===== Response =====
 export type Response = unknown;
 
-// ===== Task（旧 Process）=====
+// ===== Task =====
 export interface Task<TParams = unknown, TResult = unknown> {
   run(params: TParams): Promise<TResult>;
 }
@@ -13,13 +13,13 @@ export interface ClientFactory {
   create<T extends Client>(name: string): Promise<T>;
 }
 
-// ===== Presenter（旧 Representer）=====
+// ===== Presenter =====
 export interface Presenter<TInput = unknown, TOutput = Response> {
   transform(input: TInput): TOutput;
   transformError(cause: unknown): TOutput;
 }
 
-// ===== Executor（旧 Command）=====
+// ===== Executor =====
 export interface Executor<TParams = unknown, TResult = unknown> {
   run(params: TParams): Promise<TResult>;
 }

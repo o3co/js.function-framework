@@ -49,7 +49,7 @@ export class Factory implements ITaskFactory {
           classPath ??
             path.join(
               ...[this.autoloadPkg, "processes", `${name}.mjs`].filter(
-                (v): v is Exclude<typeof v, undefined> => v !== undefined,
+                (v): v is string => v != null,
               ),
             ),
         )
@@ -65,7 +65,7 @@ export class Factory implements ITaskFactory {
 
       return task as Task;
     } catch (cause) {
-      throw new Error(`Failed to import Task`, { cause });
+      throw new Error(`Failed to import Task "${name}"`, { cause });
     }
   };
 }

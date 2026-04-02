@@ -1,4 +1,4 @@
-import { Command as Base } from '@o3co/js.function-framework.node/cli/command/Base.mjs';
+import { Command as Base } from "@o3co/js.function-framework.node/cli/command/Base.mjs";
 
 /**
  */
@@ -7,7 +7,7 @@ export class Command extends Base {
     return {
       options: {
         format: {
-          type: 'string',
+          type: "string",
         },
       },
     };
@@ -16,11 +16,11 @@ export class Command extends Base {
   async doRun({ format }, positionals) {
     const [_command, ...message] = positionals;
 
-    const params = message.length ? { message: message.join(' ') } : {};
+    const params = message.length ? { message: message.join(" ") } : {};
 
-    return await this.runCommand('Echo', {
+    return await this.runCommand("Echo", {
       ...params,
-      representer: format ?? 'pass',
+      representer: format ?? "pass",
     });
   }
 }

@@ -1,6 +1,6 @@
 import type { Presenter, Response } from "../interfaces.mjs";
 
-export type ConstructionParams = {
+export type ConstructorParams = {
   classPath: string;
 };
 
@@ -11,7 +11,7 @@ export type TransformParams = unknown;
  * Subclasses must override doTransform() and optionally doTransformError().
  */
 export class BasePresenter<
-  TConstructorParams extends ConstructionParams = ConstructionParams,
+  TConstructorParams extends ConstructorParams = ConstructorParams,
   TTransformParams extends TransformParams = TransformParams,
 > implements Presenter<TTransformParams, Response> {
   protected params: TConstructorParams;

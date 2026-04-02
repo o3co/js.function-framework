@@ -45,7 +45,7 @@ export class Factory implements IClientFactory {
           storageFactory,
         }) as TClient;
       } catch (cause) {
-        throw new Error(`Failed to import client`, { cause });
+        throw new Error(`Failed to import client "${name}"`, { cause });
       }
     }
 

@@ -7,8 +7,6 @@ export type ConstructorParams = {
   executorFactory: ExecutorFactory;
 };
 
-/**
- */
 export class Command<DoRunOptions extends {} = Record<string, unknown>> {
   protected name: string;
 
