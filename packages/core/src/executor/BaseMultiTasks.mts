@@ -1,25 +1,23 @@
 import {
-  Command as Base,
+  BaseExecutor,
   type ConstructorParams as BaseConstructorParams,
-  type ProcessDef,
-} from "./BaseCommand.mjs";
+  type TaskDef,
+  type TaskRunParams,
+} from "./Base.mjs";
 
 export type ConstructorParams = {
-  processes: ProcessDef[];
+  processes: TaskDef[];
 } & BaseConstructorParams;
 
-export { ProcessRunParams } from "./BaseCommand.mjs";
+export { TaskRunParams as ProcessRunParams };
 
-/**
- */
-export class Command<
+export class BaseMultiTasksExecutor<
   TConstructorParams extends ConstructorParams,
-> extends Base<TConstructorParams> {
-  protected processes: ProcessDef[];
+> extends BaseExecutor<TConstructorParams> {
+  protected processes: TaskDef[];
 
   constructor(params: TConstructorParams) {
     super(params);
-
     this.processes = params.processes;
   }
 }
