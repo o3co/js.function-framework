@@ -1,7 +1,6 @@
 import fs from "node:fs";
-import path from "node:path";
 
-import { ObjectHelper } from "@o3co/js.function-framework.core/Helpers.mjs";
+import { ObjectHelper, resolveModulePath } from "@o3co/js.function-framework.core/Helpers.mjs";
 import type { Executor, ExecutorFactory as IExecutorFactory, TaskFactory, PresenterFactory } from "../interfaces.mjs";
 import type { ExecutorConfig } from "../config/schema.mjs";
 
@@ -43,36 +42,32 @@ export class Factory implements IExecutorFactory {
   ): Promise<Executor> => {
     const setting = this.commands[name] ?? {};
 
-    const mod = await (async () => {
+    const ExecutorClass = await (async () => {
       if (setting.type) {
         switch (setting.type) {
           case "SingleTask":
-            return await import("./SingleTask.mjs");
+            return (await import("./SingleTask.mjs")).SingleTaskExecutor;
           case "SequentialTasks":
-            return await import("./SequentialTasks.mjs");
+            return (await import("./SequentialTasks.mjs")).SequentialTasksExecutor;
           case "ParallelTasks":
-            return await import("./ParallelTasks.mjs");
-          default:
-            return await import(this.pathResolver(setting.type));
+            return (await import("./ParallelTasks.mjs")).ParallelTasksExecutor;
+          default: {
+            const mod = await import(this.pathResolver(setting.type));
+            return mod.Executor ?? mod.Command;
+          }
         }
       } else {
-        const classPath = this.pathResolver(
-          path.join(
-            ...[this.autoloadPkg, "commands", `${name}.mjs`].filter(
-              (v): v is string => v != null,
-            ),
-          ),
-        );
+        const classPath = resolveModulePath(this.pathResolver, this.autoloadPkg, "commands", name);
 
         if (fs.existsSync(new URL(classPath))) {
-          return await import(classPath);
+          const mod = await import(classPath);
+          return mod.Executor ?? mod.Command;
         } else {
-          return await import("./SingleTask.mjs");
+          return (await import("./SingleTask.mjs")).SingleTaskExecutor;
         }
       }
     })();
 
-    const ExecutorClass = mod.Executor ?? mod.Command;
     if (!ExecutorClass) {
       throw new Error(`Module for executor "${name}" does not export Executor or Command`);
     }

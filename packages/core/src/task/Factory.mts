@@ -1,4 +1,4 @@
-import path from "node:path";
+import { resolveModulePath } from "@o3co/js.function-framework.core/Helpers.mjs";
 import type { Task, TaskFactory as ITaskFactory, ClientFactory } from "../interfaces.mjs";
 import type { TaskConfig } from "../config/schema.mjs";
 
@@ -45,14 +45,9 @@ export class Factory implements ITaskFactory {
 
     try {
       const mod = await import(
-        this.pathResolver(
-          classPath ??
-            path.join(
-              ...[this.autoloadPkg, "processes", `${name}.mjs`].filter(
-                (v): v is string => v != null,
-              ),
-            ),
-        )
+        classPath
+          ? this.pathResolver(classPath)
+          : resolveModulePath(this.pathResolver, this.autoloadPkg, "tasks", name)
       );
 
       const TaskClass = mod.Task ?? mod.Process;
