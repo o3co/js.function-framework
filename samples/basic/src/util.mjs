@@ -1,7 +1,7 @@
 import { Factory as ClientFactory } from '@o3co/js.function-framework.core/client/Factory.mjs';
-import { Factory as CommandFactory } from '@o3co/js.function-framework.core/command/Factory.mjs';
-import { Factory as ProcessFactory } from '@o3co/js.function-framework.core/process/Factory.mjs';
-import { Factory as RepresenterFactory } from '@o3co/js.function-framework.core/representer/Factory.mjs';
+import { Factory as ExecutorFactory } from '@o3co/js.function-framework.core/executor/Factory.mjs';
+import { Factory as TaskFactory } from '@o3co/js.function-framework.core/task/Factory.mjs';
+import { Factory as PresenterFactory } from '@o3co/js.function-framework.core/presenter/Factory.mjs';
 import config from 'config';
 
 export { config };
@@ -9,7 +9,7 @@ export { config };
 export * as PromiseHelper from '@o3co/js.util.misc/async/index.mjs';
 /**
  */
-export const processFactory = new ProcessFactory({
+export const taskFactory = new TaskFactory({
   clientFactory: new ClientFactory({
     pathResolver: import.meta.resolve,
     clients: config.get('clients'),
@@ -20,16 +20,16 @@ export const processFactory = new ProcessFactory({
 
 /**
  */
-export const representerFactory = new RepresenterFactory({
+export const presenterFactory = new PresenterFactory({
   pathResolver: import.meta.resolve,
   representers: config.has('representers') ? config.get('representers') : {},
 });
 
 /**
  */
-export const commandFactory = new CommandFactory({
+export const executorFactory = new ExecutorFactory({
   pathResolver: import.meta.resolve,
-  processFactory,
-  representerFactory,
+  taskFactory,
+  presenterFactory,
   commands: config.get('commands'),
 });

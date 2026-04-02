@@ -2,11 +2,11 @@ import {
   createHandler,
   CliCommandFactory,
 } from '@o3co/js.function-framework.node/handlers/NodeHandler.mjs';
-import { config, commandFactory } from '@o3co/sample/util.mjs';
+import { config, executorFactory } from '@o3co/sample/util.mjs';
 
 const cliFactory = new CliCommandFactory({
   ...(config.has('cli') ? config.get('cli') : {}),
-  commandFactory,
+  executorFactory,
   pathResolver: import.meta.resolve,
 });
 

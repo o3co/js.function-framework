@@ -1,4 +1,4 @@
-import { Process as Base } from '@o3co/js.function-framework.core/process/Base.mjs';
+import { Process as Base } from '@o3co/js.function-framework.core/task/Base.mjs';
 
 /**
  */
