@@ -2,7 +2,9 @@ import { describe, it, expect } from "vitest";
 import { BaseTask } from "./Base.mjs";
 import type { ClientFactory } from "../interfaces.mjs";
 
-const mockClientFactory: ClientFactory = { create: async () => ({}) };
+const mockClientFactory: ClientFactory = {
+  create: async <T,>(_name: string): Promise<T> => ({} as T),
+};
 
 describe("BaseTask", () => {
   it("init() resolves as a no-op by default", async () => {
@@ -23,17 +25,19 @@ describe("BaseTask", () => {
   });
 
   it("run() delegates to doRun() with merged params (constructor + runtime)", async () => {
-    const task = new BaseTask({
+    const receivedParams: unknown[] = [];
+
+    class RecordingTask extends BaseTask {
+      async doRun(params: unknown) {
+        receivedParams.push(params);
+        return "ok";
+      }
+    }
+
+    const task = new RecordingTask({
       clientFactory: mockClientFactory,
       greeting: "hello",
     });
-
-    const receivedParams: unknown[] = [];
-
-    task.doRun = async (params) => {
-      receivedParams.push(params);
-      return "ok";
-    };
 
     const result = await task.run({ name: "world" });
 
@@ -43,16 +47,19 @@ describe("BaseTask", () => {
   });
 
   it("run() runtime params override constructor params", async () => {
-    const task = new BaseTask({
+    let merged: unknown;
+
+    class CapturingTask extends BaseTask {
+      async doRun(params: unknown) {
+        merged = params;
+        return null;
+      }
+    }
+
+    const task = new CapturingTask({
       clientFactory: mockClientFactory,
       key: "from-constructor",
     });
-
-    let merged: unknown;
-    task.doRun = async (params) => {
-      merged = params;
-      return null;
-    };
 
     await task.run({ key: "from-runtime" });
     expect(merged).toEqual({ key: "from-runtime" });

@@ -10,10 +10,13 @@ describe("BasePresenter", () => {
   });
 
   it("transform() delegates to doTransform()", () => {
-    const presenter = new BasePresenter();
+    class TestPresenter extends BasePresenter {
+      doTransform(params: unknown) {
+        return { transformed: params };
+      }
+    }
 
-    presenter.doTransform = (params) => ({ transformed: params });
-
+    const presenter = new TestPresenter();
     const result = presenter.transform("input");
     expect(result).toEqual({ transformed: "input" });
   });
@@ -34,10 +37,13 @@ describe("BasePresenter", () => {
   });
 
   it("transformError() delegates to doTransformError()", () => {
-    const presenter = new BasePresenter();
+    class TestPresenter extends BasePresenter {
+      doTransformError(_cause: unknown) {
+        return { error: "handled" };
+      }
+    }
 
-    presenter.doTransformError = (_cause) => ({ error: "handled" });
-
+    const presenter = new TestPresenter();
     const result = presenter.transformError(new Error("boom"));
     expect(result).toEqual({ error: "handled" });
   });
