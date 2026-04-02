@@ -1,5 +1,5 @@
-import type { ResponseConfig } from "@o3co/js.function-framework.core/command/BaseCommand.mjs";
-import type { Factory as CommandFactory } from "@o3co/js.function-framework.core/command/Factory.mjs";
+import type { ResponseConfig } from "@o3co/js.function-framework.core/executor/Base.mjs";
+import type { Factory as ExecutorFactory } from "@o3co/js.function-framework.core/executor/Factory.mjs";
 import * as PromiseHelper from "@o3co/js.util.misc/async/index.mjs";
 import type {
   Handler,
@@ -14,7 +14,7 @@ import type {
 
 export type CreateHandleParams = {
   config: Map<string, unknown>;
-  commandFactory: CommandFactory;
+  executorFactory: ExecutorFactory;
   onComplete?: (result: unknown) => Promise<void> | void;
   onError?: (error: unknown) => Promise<void> | void;
 };
@@ -37,7 +37,7 @@ const DefaultHandleParams = {
  */
 export const createHandler = ({
   config,
-  commandFactory,
+  executorFactory,
   onComplete = DefaultHandleParams.onComplete,
   onError = DefaultHandleParams.onError,
 }: CreateHandleParams): Handler<S3Event | SQSEvent | SNSEvent> => {
@@ -127,7 +127,7 @@ export const createHandler = ({
       const command = config.get("runtime.command") as string;
 
       return await (
-        await commandFactory.create(command, {
+        await executorFactory.create(command, {
           response: config.get("runtime.response") as string | ResponseConfig,
         })
       ).run({
