@@ -1,6 +1,4 @@
-// export type DeepPartial<T> = {
-//   [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
-// };
+import type { Presenter, Response } from "../interfaces.mjs";
 
 export type ConstructionParams = {
   classPath: string;
@@ -8,17 +6,16 @@ export type ConstructionParams = {
 
 export type TransformParams = unknown;
 
-export type Response = unknown;
-
 /**
+ * Base class for all presenters.
+ * Subclasses must override doTransform() and optionally doTransformError().
  */
-export class Representer<
+export class BasePresenter<
   TConstructorParams extends ConstructionParams = ConstructionParams,
   TTransformParams extends TransformParams = TransformParams,
-> {
+> implements Presenter<TTransformParams, Response> {
   protected params: TConstructorParams;
 
-  //
   constructor(params: TConstructorParams = {} as TConstructorParams) {
     this.params = params;
   }
@@ -28,8 +25,7 @@ export class Representer<
   };
 
   doTransform(_params: TTransformParams): Response {
-    //
-    throw new Error("NotYetImpl");
+    throw new Error("doTransform must be implemented by subclass");
   }
 
   transformError = (cause: unknown): Response => {
@@ -37,7 +33,10 @@ export class Representer<
   };
 
   doTransformError(cause: unknown): Response {
-    //
     throw cause;
   }
 }
+
+// Re-export for backward compat
+export { BasePresenter as Presenter };
+export { BasePresenter as Representer };
