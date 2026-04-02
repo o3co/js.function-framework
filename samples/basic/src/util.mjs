@@ -3,11 +3,12 @@ import { Factory as ExecutorFactory } from '@o3co/js.function-framework.core/exe
 import { Factory as TaskFactory } from '@o3co/js.function-framework.core/task/Factory.mjs';
 import { Factory as PresenterFactory } from '@o3co/js.function-framework.core/presenter/Factory.mjs';
 import { loadConfigFile } from '@o3co/js.function-framework.core/config/index.mjs';
+import { fileURLToPath } from 'node:url';
 
 export * as PromiseHelper from '@o3co/js.util.misc/async/index.mjs';
 
 export const config = loadConfigFile(
-  new URL('../config/default.conf', import.meta.url).pathname,
+  fileURLToPath(new URL('../config/default.conf', import.meta.url)),
 );
 
 /**

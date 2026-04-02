@@ -30,9 +30,9 @@ export const PresenterConfigSchema = z.object({
 }).passthrough();
 
 export const RuntimeConfigSchema = z.object({
-  command: z.string(),
+  command: z.string().optional(),
   response: ResponseConfigSchema.optional(),
-});
+}).passthrough();
 
 export const ConfigSchema = z.object({
   runtime: RuntimeConfigSchema.optional(),

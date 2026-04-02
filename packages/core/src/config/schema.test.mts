@@ -43,10 +43,26 @@ describe("ConfigSchema", () => {
     expect((result as Record<string, unknown>).customKey).toBe("customValue");
   });
 
-  it("should reject invalid runtime (missing command)", () => {
-    expect(() =>
-      ConfigSchema.parse({ runtime: {} }),
-    ).toThrow();
+  it("should accept runtime without command", () => {
+    const input = {
+      runtime: {
+        response: "json",
+      },
+    };
+    const result = ConfigSchema.parse(input);
+    expect(result.runtime?.command).toBeUndefined();
+    expect(result.runtime?.response).toBe("json");
+  });
+
+  it("should preserve extra runtime keys (e.g. responseParams)", () => {
+    const input = {
+      runtime: {
+        command: "test",
+        responseParams: { pretty: true },
+      },
+    };
+    const result = ConfigSchema.parse(input);
+    expect((result.runtime as Record<string, unknown>).responseParams).toEqual({ pretty: true });
   });
 
   it("should accept response as string", () => {

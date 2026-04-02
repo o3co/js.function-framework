@@ -19,12 +19,13 @@ describe("loadConfig", () => {
     expect(config.commands?.Echo?.type).toBe("SingleTask");
   });
 
-  it("should throw on invalid config", () => {
+  it("should accept runtime without command", () => {
     const hocon = `
       runtime {
       }
     `;
-    expect(() => loadConfig(hocon)).toThrow();
+    const config = loadConfig(hocon);
+    expect(config.runtime?.command).toBeUndefined();
   });
 
   it("should handle empty config", () => {
