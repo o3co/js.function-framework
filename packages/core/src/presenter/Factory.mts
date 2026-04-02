@@ -29,7 +29,7 @@ export class Factory implements IPresenterFactory {
 
   create = async <TParams extends Partial<PresenterConstructionParams>>(
     name: string,
-    params: TParams,
+    params: TParams = {} as TParams,
   ): Promise<Presenter> => {
     const setting = this.presenters?.[name];
 

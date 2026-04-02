@@ -10,8 +10,8 @@ export type ResponseConfig =
   | ({ type?: string } & Record<string, unknown>);
 
 export type TaskDef = {
-  process: string;
-  params: TaskRunParams;
+  process?: string;
+  params?: TaskRunParams;
 };
 
 export type TaskRunParams = Record<string, unknown>;

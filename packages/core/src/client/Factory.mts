@@ -7,7 +7,7 @@ interface ClientDefinition {
 }
 
 interface ConstructorParams {
-  pathResolver?: (string) => string;
+  pathResolver?: (path: string) => string;
   clients: Record<string, ClientDefinition>;
   storageFactory?: unknown;
   autoloadPkg?: string;

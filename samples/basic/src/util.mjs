@@ -22,7 +22,7 @@ export const taskFactory = new TaskFactory({
  */
 export const presenterFactory = new PresenterFactory({
   pathResolver: import.meta.resolve,
-  representers: config.has('representers') ? config.get('representers') : {},
+  presenters: config.has('presenters') ? config.get('presenters') : {},
 });
 
 /**

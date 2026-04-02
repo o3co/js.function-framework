@@ -7,7 +7,7 @@ import {
 
 export type ConstructorParams = BaseConstructorParams;
 
-export { ProcessRunParams };
+export type { ProcessRunParams };
 
 export class SequentialTasksExecutor extends BaseMultiTasksExecutor<ConstructorParams> {
   async doRun(params: ProcessRunParams): Promise<unknown> {

@@ -9,7 +9,7 @@ export type ConstructorParams = {
   processes: TaskDef[];
 } & BaseConstructorParams;
 
-export { TaskRunParams as ProcessRunParams };
+export type { TaskRunParams as ProcessRunParams };
 
 export class BaseMultiTasksExecutor<
   TConstructorParams extends ConstructorParams,
