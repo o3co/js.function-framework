@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "@o3co/js.function-framework.core": "workspace:*",
-    "@o3co/js.util.promise": "0.5.0",
+    "@o3co/js.util.misc": "0.6.0",
     "@types/aws-lambda": "^8.10.161",
     "deepmerge": "4.3.1",
     "typescript": "5.9.3"
@@ -27,7 +27,7 @@
   },
   "peerDependencies": {
     "@o3co/js.function-framework.core": "*",
-    "@o3co/js.util.promise": "0.5.*",
+    "@o3co/js.util.misc": "0.6.*",
     "@types/aws-lambda": "^8.10.160",
     "deepmerge": "4.3.1"
   }

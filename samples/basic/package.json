@@ -20,8 +20,7 @@
   "dependencies": {
     "@o3co/js.function-framework.core": "../../packages/core",
     "@o3co/js.function-framework.node": "../../packages/node",
-    "@o3co/js.util.promise": "^0.4.2",
-    "@o3co/js.util.storage": "0.3.*",
+    "@o3co/js.util.misc": "0.6.0",
     "config": "^4.1.1",
     "file-type": "21.1.*",
     "js-yaml": "^4.1.1",

@@ -17,9 +17,7 @@
     "./*": "./built/*"
   },
   "dependencies": {
-    "@o3co/js.util.misc": "0.5.0",
-    "@o3co/js.util.promise": "0.5.0",
-    "@o3co/js.util.storage": "0.5.0",
+    "@o3co/js.util.misc": "0.6.0",
     "config": "^4.4.1",
     "js-yaml": "^4.1.1"
   },

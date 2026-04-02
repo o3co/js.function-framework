@@ -2,19 +2,17 @@ import { Factory as ClientFactory } from '@o3co/js.function-framework.core/clien
 import { Factory as CommandFactory } from '@o3co/js.function-framework.core/command/Factory.mjs';
 import { Factory as ProcessFactory } from '@o3co/js.function-framework.core/process/Factory.mjs';
 import { Factory as RepresenterFactory } from '@o3co/js.function-framework.core/representer/Factory.mjs';
-import { Factory as StorageFactory } from '@o3co/js.util.storage/Factory.mjs';
 import config from 'config';
 
 export { config };
 
-export * as PromiseHelper from '@o3co/js.util.promise/Helper.mjs';
+export * as PromiseHelper from '@o3co/js.util.misc/async/index.mjs';
 /**
  */
 export const processFactory = new ProcessFactory({
   clientFactory: new ClientFactory({
     pathResolver: import.meta.resolve,
     clients: config.get('clients'),
-    storageFactory: new StorageFactory(config.get('storages')),
   }),
   pathResolver: import.meta.resolve,
   processes: config.get('processes'),

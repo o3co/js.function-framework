@@ -1,4 +1,4 @@
-import { deepMerge } from "@o3co/js.util.misc/types/object/Helper.mjs";
+import { deepMerge } from "@o3co/js.util.misc/types/object/index.mjs";
 import type {
   Representer,
   ConstructionParams as RepresenterConstructionParams,
