@@ -2,27 +2,37 @@ import fs from "node:fs";
 import path from "node:path";
 
 import { ObjectHelper } from "@o3co/js.function-framework.core/Helpers.mjs";
-import type { Executor, ExecutorFactory as IExecutorFactory } from "../interfaces.mjs";
+import type { Executor, ExecutorFactory as IExecutorFactory, TaskFactory, PresenterFactory } from "../interfaces.mjs";
+import type { ExecutorConfig } from "../config/schema.mjs";
 
 export type ConstructorParams = {
   autoloadPkg?: string;
   pathResolver?: (path: string) => string;
-} & Record<string, unknown>;
+  taskFactory: TaskFactory;
+  presenterFactory: PresenterFactory;
+  commands?: Record<string, ExecutorConfig>;
+};
 
 /**
  * Factory class for creating executor instances
  */
 export class Factory implements IExecutorFactory {
-  protected params: Record<string, unknown>;
+  protected taskFactory: TaskFactory;
+  protected presenterFactory: PresenterFactory;
+  protected commands: Record<string, ExecutorConfig>;
   protected pathResolver: (path: string) => string;
   protected autoloadPkg: string | undefined;
 
   constructor({
     autoloadPkg = process.env.npm_package_name,
     pathResolver = import.meta.resolve,
-    ...params
+    taskFactory,
+    presenterFactory,
+    commands = {},
   }: ConstructorParams) {
-    this.params = params;
+    this.taskFactory = taskFactory;
+    this.presenterFactory = presenterFactory;
+    this.commands = commands;
     this.pathResolver = pathResolver;
     this.autoloadPkg = autoloadPkg;
   }
@@ -31,9 +41,7 @@ export class Factory implements IExecutorFactory {
     name: string,
     params: Record<string, unknown> = {},
   ): Promise<Executor> => {
-    const { taskFactory, presenterFactory, commands } = this.params as Record<string, any>;
-
-    const setting = commands?.[name] ?? {};
+    const setting = this.commands[name] ?? {};
 
     const mod = await (async () => {
       if (setting.type) {
@@ -65,7 +73,6 @@ export class Factory implements IExecutorFactory {
       }
     })();
 
-    // Support both new { Executor } and old { Command } exports
     const ExecutorClass = mod.Executor ?? mod.Command;
     if (!ExecutorClass) {
       throw new Error(`Module does not export Executor or Command`);
@@ -74,8 +81,8 @@ export class Factory implements IExecutorFactory {
     const executor = new ExecutorClass({
       ...ObjectHelper.cleanup(setting),
       ...ObjectHelper.cleanup(params),
-      taskFactory,
-      presenterFactory,
+      taskFactory: this.taskFactory,
+      presenterFactory: this.presenterFactory,
       name,
     });
 

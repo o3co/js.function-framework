@@ -9,7 +9,7 @@
   "packageManager": "yarn@1.22.22",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "biild": "make build",
+    "build": "make build",
     "predebug": "make build",
     "debug": "node src/handlers/NodeHandler.mjs",
     "command": "node src/handlers/NodeHandler.mjs"
@@ -21,9 +21,6 @@
     "@o3co/js.function-framework.core": "../../packages/core",
     "@o3co/js.function-framework.node": "../../packages/node",
     "@o3co/js.util.misc": "0.6.0",
-    "config": "^4.1.1",
-    "file-type": "21.1.*",
-    "js-yaml": "^4.1.1",
     "p-limit": "7.2.*"
   }
 }

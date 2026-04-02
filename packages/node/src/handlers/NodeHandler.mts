@@ -3,8 +3,12 @@ import type { Factory as CliCommandFactory } from "@o3co/js.function-framework.n
 
 export type CreateHandlerOptions = {
   config: {
-    has: (key: string) => boolean;
-    get: (key: string) => unknown;
+    runtime?: {
+      command?: string;
+      response?: string | ({ type?: string } & Record<string, unknown>);
+      responseParams?: Record<string, unknown>;
+    };
+    [key: string]: unknown;
   };
   cliFactory: CliCommandFactory;
   onComplete?: (result: unknown) => Promise<void> | void;
@@ -21,12 +25,7 @@ export const createHandler =
   }: CreateHandlerOptions) =>
   async () => {
     try {
-      const runtimeSettings = (
-        config.has("runtime") ? config.get("runtime") : {}
-      ) as {
-        response?: string;
-        responseParams?: Record<string, unknown>;
-      };
+      const runtimeSettings = config.runtime ?? {};
 
       const { positionals } = parseArgs({
         strict: false, //未定義の引数を許可
@@ -38,12 +37,16 @@ export const createHandler =
         throw new Error("Task not specified");
       }
 
+      const response =
+        typeof runtimeSettings.response === "string"
+          ? { type: runtimeSettings.response, ...(runtimeSettings.responseParams ?? {}) }
+          : typeof runtimeSettings.response === "object"
+            ? { ...runtimeSettings.response, ...(runtimeSettings.responseParams ?? {}) }
+            : { ...(runtimeSettings.responseParams ?? {}) };
+
       const ret = await (
         await cliFactory.create(positionals[0], {
-          response: {
-            type: runtimeSettings.response,
-            ...(runtimeSettings.responseParams ?? {}),
-          },
+          response,
         })
       ).run();
 

@@ -1,3 +1,0 @@
-storages:
-  s3:
-    region: ap_northeast_1

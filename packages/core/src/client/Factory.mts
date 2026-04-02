@@ -1,24 +1,19 @@
 import path from "node:path";
+import type { Client, ClientFactory as IClientFactory } from "../interfaces.mjs";
+import type { ClientConfig } from "../config/schema.mjs";
 
-import type { ClientFactory as IClientFactory } from "../interfaces.mjs";
-
-interface ClientDefinition {
-  classPath?: string;
-}
-
-interface ConstructorParams {
+export type ConstructorParams = {
   pathResolver?: (path: string) => string;
-  clients: Record<string, ClientDefinition>;
+  clients: Record<string, ClientConfig>;
   storageFactory?: unknown;
   autoloadPkg?: string;
-}
+};
 
 /**
  * Factory class for creating client instances
  */
 export class Factory implements IClientFactory {
   private params: ConstructorParams;
-
   private autoloadPkg: string | undefined;
 
   constructor(params: ConstructorParams) {
@@ -26,13 +21,10 @@ export class Factory implements IClientFactory {
     this.autoloadPkg = params.autoloadPkg ?? process.env.npm_package_name;
   }
 
-  /**
-   * クライアントを生成
-   */
-  async create<TClient>(name: string): Promise<TClient> {
+  async create<TClient extends Client>(name: string): Promise<TClient> {
     const {
       storageFactory,
-      clients: { [name]: params = {} },
+      clients: { [name]: clientDef = {} },
       pathResolver = import.meta.resolve,
     } = this.params;
 
@@ -40,7 +32,7 @@ export class Factory implements IClientFactory {
       try {
         const { Client: Component } = await import(
           pathResolver(
-            params.classPath ??
+            clientDef.classPath ??
               path.join(
                 ...[this.autoloadPkg, "clients", `${name}.mjs`].filter(
                   (v) => v,
@@ -49,7 +41,7 @@ export class Factory implements IClientFactory {
           )
         );
         return new Component({
-          ...params,
+          ...clientDef,
           storageFactory,
         }) as TClient;
       } catch (cause) {

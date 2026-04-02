@@ -1,10 +1,13 @@
 import path from "node:path";
-import type { Task, TaskFactory as ITaskFactory } from "../interfaces.mjs";
+import type { Task, TaskFactory as ITaskFactory, ClientFactory } from "../interfaces.mjs";
+import type { TaskConfig } from "../config/schema.mjs";
 
-type ConstructorParams = {
+export type ConstructorParams = {
   autoloadPkg?: string;
   pathResolver?: (path: string) => string;
-} & Record<string, unknown>;
+  clientFactory: ClientFactory;
+  processes?: Record<string, TaskConfig>;
+};
 
 export type CreateParams = Record<string, unknown>;
 
@@ -12,35 +15,38 @@ export type CreateParams = Record<string, unknown>;
  * Factory class for creating task instances
  */
 export class Factory implements ITaskFactory {
-  private config: Record<string, unknown>;
+  private clientFactory: ClientFactory;
+  private processes: Record<string, TaskConfig>;
   private autoloadPkg: string | undefined;
   private pathResolver: (path: string) => string;
 
   constructor({
     autoloadPkg = process.env.npm_package_name,
     pathResolver = import.meta.resolve,
-    ...config
+    clientFactory,
+    processes = {},
   }: ConstructorParams) {
-    this.config = config;
+    this.clientFactory = clientFactory;
+    this.processes = processes;
     this.pathResolver = pathResolver;
     this.autoloadPkg = autoloadPkg ?? process.env.npm_package_name;
   }
 
   create = async (name: string, params: CreateParams = {}): Promise<Task> => {
-    const { clientFactory, processes } = this.config;
+    const setting = this.processes[name] ?? {};
 
-    const setting = (processes as Record<string, Record<string, unknown>> | undefined)?.[name] ?? {};
-
-    const config = {
+    const config: Record<string, unknown> & { classPath?: string } = {
       ...setting,
       ...params,
-      clientFactory,
+      clientFactory: this.clientFactory,
     };
+
+    const classPath = typeof config.classPath === "string" ? config.classPath : undefined;
 
     try {
       const mod = await import(
         this.pathResolver(
-          (config as Record<string, string>).classPath ??
+          classPath ??
             path.join(
               ...[this.autoloadPkg, "processes", `${name}.mjs`].filter(
                 (v): v is Exclude<typeof v, undefined> => v !== undefined,

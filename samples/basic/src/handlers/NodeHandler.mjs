@@ -5,7 +5,7 @@ import {
 import { config, executorFactory } from '@o3co/sample/util.mjs';
 
 const cliFactory = new CliCommandFactory({
-  ...(config.has('cli') ? config.get('cli') : {}),
+  ...(config.cli ?? {}),
   executorFactory,
   pathResolver: import.meta.resolve,
 });
