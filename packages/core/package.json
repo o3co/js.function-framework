@@ -18,8 +18,8 @@
   },
   "dependencies": {
     "@o3co/js.util.misc": "0.6.0",
-    "config": "^4.4.1",
-    "js-yaml": "^4.1.1"
+    "@o3co/ts.hocon": "0.1.3",
+    "zod": "^3.24.0"
   },
   "devDependencies": {
     "@types/node": "24.10.4",
