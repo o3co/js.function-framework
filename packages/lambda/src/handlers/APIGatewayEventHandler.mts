@@ -1,6 +1,6 @@
 import type { ResponseConfig } from "@o3co/js.function-framework.core/command/BaseCommand.mjs";
 import type { Factory as CommandFactory } from "@o3co/js.function-framework.core/command/Factory.mjs";
-import * as PromiseHelper from "@o3co/js.util.promise/Helper.mjs";
+import * as PromiseHelper from "@o3co/js.util.misc/async/index.mjs";
 import type {
   APIGatewayProxyEvent,
   APIGatewayProxyEventV2,

@@ -1,4 +1,4 @@
-import * as PromiseHelper from "@o3co/js.util.promise/Helper.mjs";
+import * as PromiseHelper from "@o3co/js.util.misc/async/index.mjs";
 
 import {
   Command as Base,
@@ -31,7 +31,7 @@ export class Command extends Base<ConstructorParams> {
         ).run({ ...(process.params ?? {}), ...params });
       },
       {
-        limit: this.numOfThreads,
+        concurrency: this.numOfThreads,
         stopOnFailure: true,
       },
     );

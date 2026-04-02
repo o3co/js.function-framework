@@ -1,5 +1,4 @@
 import path from "node:path";
-import type { Factory as StorageFactory } from "@o3co/js.util.storage/Factory.d.mts";
 
 interface ClientDefinition {
   classPath?: string;
@@ -8,7 +7,7 @@ interface ClientDefinition {
 interface ConstructorParams {
   pathResolver?: (string) => string;
   clients: Record<string, ClientDefinition>;
-  storageFactory: StorageFactory;
+  storageFactory?: unknown;
   autoloadPkg?: string;
 }
 

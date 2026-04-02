@@ -16,7 +16,7 @@
     "./*": "./built/*"
   },
   "dependencies": {
-    "@o3co/js.util.misc": "0.5.0"
+    "@o3co/js.util.misc": "0.6.0"
   },
   "devDependencies": {
     "@o3co/js.function-framework.core": "workspace:*",

@@ -1,4 +1,4 @@
-import * as PromiseHelper from "@o3co/js.util.promise/Helper.mjs";
+import * as PromiseHelper from "@o3co/js.util.misc/async/index.mjs";
 import {
   Command as Base,
   type ConstructorParams as BaseConstructorParams,
