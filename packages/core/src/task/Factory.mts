@@ -35,16 +35,18 @@ export class Factory implements ITaskFactory {
   create = async (name: string, params: CreateParams = {}): Promise<Task> => {
     const setting = this.processes[name] ?? {};
 
-    const config = {
+    const config: Record<string, unknown> & { classPath?: string } = {
       ...setting,
       ...params,
       clientFactory: this.clientFactory,
     };
 
+    const classPath = typeof config.classPath === 'string' ? config.classPath : undefined;
+
     try {
       const mod = await import(
         this.pathResolver(
-          (config as unknown as Record<string, string>).classPath ??
+          classPath ??
             path.join(
               ...[this.autoloadPkg, "processes", `${name}.mjs`].filter(
                 (v): v is Exclude<typeof v, undefined> => v !== undefined,

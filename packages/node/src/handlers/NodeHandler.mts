@@ -4,7 +4,7 @@ import type { Factory as CliCommandFactory } from "@o3co/js.function-framework.n
 export type CreateHandlerOptions = {
   config: {
     runtime?: {
-      response?: string;
+      response?: string | ({ type?: string } & Record<string, unknown>);
       responseParams?: Record<string, unknown>;
     };
     [key: string]: unknown;
@@ -36,12 +36,16 @@ export const createHandler =
         throw new Error("Task not specified");
       }
 
+      const response =
+        typeof runtimeSettings.response === "string"
+          ? { type: runtimeSettings.response, ...(runtimeSettings.responseParams ?? {}) }
+          : typeof runtimeSettings.response === "object"
+            ? { ...runtimeSettings.response, ...(runtimeSettings.responseParams ?? {}) }
+            : { ...(runtimeSettings.responseParams ?? {}) };
+
       const ret = await (
         await cliFactory.create(positionals[0], {
-          response: {
-            type: runtimeSettings.response,
-            ...(runtimeSettings.responseParams ?? {}),
-          },
+          response,
         })
       ).run();
 
