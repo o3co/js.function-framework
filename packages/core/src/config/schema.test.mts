@@ -19,8 +19,8 @@ describe("ConfigSchema", () => {
           response: { type: "static", return: '{"ok": true}' },
         },
       },
-      processes: {
-        Echo: { classPath: "./processes/Echo.mjs" },
+      tasks: {
+        Echo: { classPath: "./tasks/Echo.mjs" },
       },
       clients: {
         s3: { classPath: "./clients/S3.mjs" },

@@ -20,8 +20,8 @@ export type CreateHandleParams = {
 };
 
 const DefaultHandleParams = {
-  onComplete: async (_result) => {},
-  onError: async (error) => {
+  onComplete: async (_result: unknown) => {},
+  onError: async (error: unknown) => {
     console.error("S3EventHandler encountered an error:", error);
   },
 };
@@ -41,16 +41,16 @@ export const createHandler = ({
 }: CreateHandleParams): Handler<S3Event | SQSEvent | SNSEvent> => {
   // handleEvent
   return async (event: S3Event | SQSEvent | SNSEvent) => {
-    const isSNSMessage = (event: any): event is SNSMessage => {
+    const isSNSMessage = (event: unknown): event is SNSMessage => {
       return (
-        typeof event?.TopicArn === "string" &&
-        typeof event?.Message === "string"
+        typeof (event as Record<string, unknown>)?.TopicArn === "string" &&
+        typeof (event as Record<string, unknown>)?.Message === "string"
       );
     };
 
     const handleEventOrSnsMessage = async (
       event: S3Event | SQSEvent | SNSEvent | SNSMessage,
-    ) => {
+    ): Promise<unknown[] | undefined> => {
       if (isSNSMessage(event)) {
         const snsMessage = event as SNSMessage;
 
@@ -69,9 +69,9 @@ export const createHandler = ({
 
     const handleRecord = async (
       record: S3EventRecord | SQSRecord | SNSEventRecord,
-    ) => {
-      const isSNSRecord = (record: any): record is SNSEventRecord => {
-        return record?.EventSource === "aws:sns" || record?.Sns != null;
+    ): Promise<unknown> => {
+      const isSNSRecord = (record: unknown): record is SNSEventRecord => {
+        return (record as Record<string, unknown>)?.EventSource === "aws:sns" || (record as Record<string, unknown>)?.Sns != null;
       };
 
       if (isSNSRecord(record)) {

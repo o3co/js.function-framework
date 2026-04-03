@@ -19,7 +19,7 @@ export const taskFactory = new TaskFactory({
     clients: config.clients ?? {},
   }),
   pathResolver: import.meta.resolve,
-  processes: config.processes ?? {},
+  tasks: config.tasks ?? {},
 });
 
 /**

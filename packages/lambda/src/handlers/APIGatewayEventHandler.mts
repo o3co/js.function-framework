@@ -17,8 +17,8 @@ export type CreateHandleParams = {
 };
 
 const DefaultHandleParams = {
-  onComplete: async (_result) => {},
-  onError: async (error) => {
+  onComplete: async (_result: unknown) => {},
+  onError: async (error: unknown) => {
     console.error("Error occurs:", error);
   },
 };

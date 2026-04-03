@@ -14,10 +14,10 @@
     "./*": "./src/*"
   },
   "dependencies": {
-    "@o3co/js.function-framework.core": "0.0.0-snapshot",
-    "@o3co/js.function-framework.node": "0.0.0-snapshot",
-    "@o3co/js.function-framework.lambda": "0.0.0-snapshot",
-    "@o3co/js.util.misc": "0.6.0",
+    "@o3co/js.function-framework.core": "*",
+    "@o3co/js.function-framework.node": "*",
+    "@o3co/js.function-framework.lambda": "*",
+    "@o3co/js.util.misc": "*",
     "deepmerge": "^4.3.1",
     "@types/aws-lambda": "^8.10.145"
   }

@@ -63,6 +63,7 @@ export class Factory implements IExecutorFactory {
           const mod = await import(classPath);
           return mod.Executor ?? mod.Command;
         } else {
+          console.warn(`[function-framework] No executor found for "${name}", falling back to SingleTaskExecutor`);
           return (await import("./SingleTask.mjs")).SingleTaskExecutor;
         }
       }
