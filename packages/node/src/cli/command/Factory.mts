@@ -80,7 +80,7 @@ export class Factory {
     }
   };
 
-  run = async (name) => {
+  run = async (name: string) => {
     const command = await this.create(name);
 
     return await command.run();

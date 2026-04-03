@@ -37,7 +37,7 @@ export const RuntimeConfigSchema = z.object({
 export const ConfigSchema = z.object({
   runtime: RuntimeConfigSchema.optional(),
   commands: z.record(ExecutorConfigSchema).optional(),
-  processes: z.record(TaskConfigSchema).optional(),
+  tasks: z.record(TaskConfigSchema).optional(),
   clients: z.record(ClientConfigSchema).optional(),
   presenters: z.record(PresenterConfigSchema).optional(),
 }).passthrough();

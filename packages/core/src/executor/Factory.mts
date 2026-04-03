@@ -4,6 +4,8 @@ import { ObjectHelper, resolveModulePath } from "@o3co/js.function-framework.cor
 import type { Executor, ExecutorFactory as IExecutorFactory, TaskFactory, PresenterFactory } from "../interfaces.mjs";
 import type { ExecutorConfig } from "../config/schema.mjs";
 
+const warnedNames = new Set<string>();
+
 export type ConstructorParams = {
   autoloadPkg?: string;
   pathResolver?: (path: string) => string;
@@ -63,6 +65,10 @@ export class Factory implements IExecutorFactory {
           const mod = await import(classPath);
           return mod.Executor ?? mod.Command;
         } else {
+          if (!warnedNames.has(name)) {
+            warnedNames.add(name);
+            console.warn(`[function-framework] No executor found for "${name}", falling back to SingleTaskExecutor`);
+          }
           return (await import("./SingleTask.mjs")).SingleTaskExecutor;
         }
       }

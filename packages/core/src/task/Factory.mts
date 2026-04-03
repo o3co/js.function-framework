@@ -6,7 +6,7 @@ export type ConstructorParams = {
   autoloadPkg?: string;
   pathResolver?: (path: string) => string;
   clientFactory: ClientFactory;
-  processes?: Record<string, TaskConfig>;
+  tasks?: Record<string, TaskConfig>;
 };
 
 export type CreateParams = Record<string, unknown>;
@@ -16,7 +16,7 @@ export type CreateParams = Record<string, unknown>;
  */
 export class Factory implements ITaskFactory {
   private clientFactory: ClientFactory;
-  private processes: Record<string, TaskConfig>;
+  private tasks: Record<string, TaskConfig>;
   private autoloadPkg: string | undefined;
   private pathResolver: (path: string) => string;
 
@@ -24,16 +24,16 @@ export class Factory implements ITaskFactory {
     autoloadPkg = process.env.npm_package_name,
     pathResolver = import.meta.resolve,
     clientFactory,
-    processes = {},
+    tasks = {},
   }: ConstructorParams) {
     this.clientFactory = clientFactory;
-    this.processes = processes;
+    this.tasks = tasks;
     this.pathResolver = pathResolver;
     this.autoloadPkg = autoloadPkg ?? process.env.npm_package_name;
   }
 
   create = async (name: string, params: CreateParams = {}): Promise<Task> => {
-    const setting = this.processes[name] ?? {};
+    const setting = this.tasks[name] ?? {};
 
     const config: Record<string, unknown> & { classPath?: string } = {
       ...setting,

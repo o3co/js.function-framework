@@ -8,7 +8,7 @@
     "declarationMap": true,
     "allowJs": true,
     "checkJs": false,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "lib": ["es2022"]
   },
   "include": ["src"],
