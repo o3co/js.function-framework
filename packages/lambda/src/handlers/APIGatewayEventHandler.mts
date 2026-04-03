@@ -1,5 +1,3 @@
-import type { ResponseConfig } from "@o3co/js.function-framework.core/executor/Base.mjs";
-import type { Factory as ExecutorFactory } from "@o3co/js.function-framework.core/executor/Factory.mjs";
 import * as PromiseHelper from "@o3co/js.util.misc/async/index.mjs";
 import type {
   APIGatewayProxyEvent,
@@ -8,19 +6,9 @@ import type {
   SQSEvent,
   SQSRecord,
 } from "aws-lambda";
+import type { CreateHandlerParams } from "../types.mjs";
 
-export type CreateHandleParams = {
-  config: {
-    runtime?: {
-      command?: string;
-      response?: string | ({ type?: string } & Record<string, unknown>);
-    };
-    [key: string]: unknown;
-  };
-  executorFactory: ExecutorFactory;
-  onError?: (error: unknown) => Promise<void> | void;
-  onComplete?: (result: unknown) => Promise<void> | void;
-};
+export type { CreateHandlerParams as CreateHandleParams };
 
 const DefaultHandleParams = {
   onComplete: async (_result: unknown) => {},
@@ -40,7 +28,7 @@ export const createHandler = ({
   executorFactory,
   onComplete = DefaultHandleParams.onComplete,
   onError = DefaultHandleParams.onError,
-}: CreateHandleParams): Handler<APIGatewayProxyEvent> => {
+}: CreateHandlerParams): Handler<APIGatewayProxyEvent> => {
   // handleEvent
   return async (
     event: APIGatewayProxyEvent | APIGatewayProxyEventV2 | SQSEvent,
@@ -154,12 +142,15 @@ export const createHandler = ({
       queryParams: Record<string, string[]>;
       headers: Record<string, string[]>;
     }) => {
-      const runtime = (config.runtime ?? {}) as Record<string, unknown>;
-      const command = runtime.command as string;
+      const command = config.runtime?.command;
+      if (!command || typeof command !== "string") {
+        throw new Error("runtime.command is not configured");
+      }
+      const response = config.runtime?.response;
 
       return await (
         await executorFactory.create(command, {
-          response: runtime.response as string | ResponseConfig,
+          response,
         })
       ).run({
         ...(request.body as Record<string, unknown>),

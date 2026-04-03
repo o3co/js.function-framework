@@ -1,5 +1,3 @@
-import type { ResponseConfig } from "@o3co/js.function-framework.core/executor/Base.mjs";
-import type { Factory as ExecutorFactory } from "@o3co/js.function-framework.core/executor/Factory.mjs";
 import * as PromiseHelper from "@o3co/js.util.misc/async/index.mjs";
 import type {
   Handler,
@@ -11,19 +9,9 @@ import type {
   SQSEvent,
   SQSRecord,
 } from "aws-lambda";
+import type { CreateHandlerParams } from "../types.mjs";
 
-export type CreateHandleParams = {
-  config: {
-    runtime?: {
-      command?: string;
-      response?: string | ({ type?: string } & Record<string, unknown>);
-    };
-    [key: string]: unknown;
-  };
-  executorFactory: ExecutorFactory;
-  onComplete?: (result: unknown) => Promise<void> | void;
-  onError?: (error: unknown) => Promise<void> | void;
-};
+export type { CreateHandlerParams as CreateHandleParams };
 
 const DefaultHandleParams = {
   onComplete: async (_result: unknown) => {},
@@ -44,7 +32,7 @@ export const createHandler = ({
   executorFactory,
   onComplete = DefaultHandleParams.onComplete,
   onError = DefaultHandleParams.onError,
-}: CreateHandleParams): Handler<S3Event | SQSEvent | SNSEvent> => {
+}: CreateHandlerParams): Handler<S3Event | SQSEvent | SNSEvent> => {
   // handleEvent
   return async (event: S3Event | SQSEvent | SNSEvent) => {
     const isSNSMessage = (event: unknown): event is SNSMessage => {
@@ -146,12 +134,15 @@ export const createHandler = ({
      */
     const handleCommandForS3Record = async (record: S3EventRecord) => {
       // Execute command from the configuration
-      const runtime = (config.runtime ?? {}) as Record<string, unknown>;
-      const command = runtime.command as string;
+      const command = config.runtime?.command;
+      if (!command || typeof command !== "string") {
+        throw new Error("runtime.command is not configured");
+      }
+      const response = config.runtime?.response;
 
       return await (
         await executorFactory.create(command, {
-          response: runtime.response as string | ResponseConfig,
+          response,
         })
       ).run({
         ...record,
