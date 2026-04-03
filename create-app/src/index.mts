@@ -24,6 +24,14 @@ async function main() {
     process.exit(1);
   }
 
+  // Validate project name
+  const validNamePattern = /^[a-z0-9]([a-z0-9._-]*[a-z0-9])?$/;
+  if (!validNamePattern.test(projectName) || projectName.includes("..") || projectName.includes("/") || projectName.includes("\\")) {
+    console.error(`Error: "${projectName}" is not a valid project name.`);
+    console.error("Use lowercase letters, numbers, hyphens, dots, or underscores.");
+    process.exit(1);
+  }
+
   const targetDir = path.resolve(process.cwd(), projectName);
 
   if (fs.existsSync(targetDir)) {
@@ -132,6 +140,8 @@ function adjustDeps(dir: string, handlers: HandlerChoice): void {
 
   if (handlers === "node") {
     delete pkg.dependencies["@o3co/js.function-framework.lambda"];
+    delete pkg.dependencies["deepmerge"];
+    delete pkg.dependencies["@types/aws-lambda"];
   } else if (handlers === "lambda") {
     delete pkg.dependencies["@o3co/js.function-framework.node"];
     delete pkg.scripts.debug;

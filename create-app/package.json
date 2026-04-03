@@ -7,8 +7,9 @@
   "bin": {
     "create-function-framework": "./built/index.mjs"
   },
+  "files": ["built/", "templates/"],
   "publishConfig": {
-    "@o3co:registry": "https://npm.pkg.github.com"
+    "registry": "https://npm.pkg.github.com"
   },
   "scripts": {
     "build": "tsc --build",
