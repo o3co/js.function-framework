@@ -1,5 +1,3 @@
-import type { ResponseConfig } from "@o3co/js.function-framework.core/executor/Base.mjs";
-import type { Factory as ExecutorFactory } from "@o3co/js.function-framework.core/executor/Factory.mjs";
 import * as PromiseHelper from "@o3co/js.util.misc/async/index.mjs";
 import type {
   APIGatewayProxyEvent,
@@ -8,13 +6,9 @@ import type {
   SQSEvent,
   SQSRecord,
 } from "aws-lambda";
+import type { CreateHandlerParams } from "../types.mjs";
 
-export type CreateHandleParams = {
-  config: Map<string, unknown>;
-  executorFactory: ExecutorFactory;
-  onError?: (error: unknown) => Promise<void> | void;
-  onComplete?: (result: unknown) => Promise<void> | void;
-};
+export type { CreateHandlerParams as CreateHandleParams };
 
 const DefaultHandleParams = {
   onComplete: async (_result: unknown) => {},
@@ -34,7 +28,7 @@ export const createHandler = ({
   executorFactory,
   onComplete = DefaultHandleParams.onComplete,
   onError = DefaultHandleParams.onError,
-}: CreateHandleParams): Handler<APIGatewayProxyEvent> => {
+}: CreateHandlerParams): Handler<APIGatewayProxyEvent> => {
   // handleEvent
   return async (
     event: APIGatewayProxyEvent | APIGatewayProxyEventV2 | SQSEvent,
@@ -46,7 +40,12 @@ export const createHandler = ({
         event.body && event.isBase64Encoded
           ? Buffer.from(event.body, "base64").toString("utf-8")
           : event.body;
-      return temp ? JSON.parse(temp) : null;
+      if (!temp) return null;
+      try {
+        return JSON.parse(temp);
+      } catch (cause) {
+        throw new Error("Failed to parse request body as JSON", { cause });
+      }
     };
 
     const handleV1Event = async (event: APIGatewayProxyEvent) => {
@@ -125,11 +124,17 @@ export const createHandler = ({
     };
 
     const handleSQSRecord = async (record: SQSRecord) => {
-      return await handleAPIGatewayEvent(
-        JSON.parse(record.body) as
+      let parsed: APIGatewayProxyEvent | APIGatewayProxyEventV2;
+      try {
+        parsed = JSON.parse(record.body) as
           | APIGatewayProxyEvent
-          | APIGatewayProxyEventV2,
-      );
+          | APIGatewayProxyEventV2;
+      } catch (cause) {
+        throw new Error("Failed to parse SQS record body as APIGateway event", {
+          cause,
+        });
+      }
+      return await handleAPIGatewayEvent(parsed);
     };
 
     const handleRequest = async (request: {
@@ -137,11 +142,15 @@ export const createHandler = ({
       queryParams: Record<string, string[]>;
       headers: Record<string, string[]>;
     }) => {
-      const command = config.get("runtime.command") as string;
+      const command = config.runtime?.command;
+      if (!command || typeof command !== "string") {
+        throw new Error("runtime.command is not configured");
+      }
+      const response = config.runtime?.response;
 
       return await (
         await executorFactory.create(command, {
-          response: config.get("runtime.response") as string | ResponseConfig,
+          response,
         })
       ).run({
         ...(request.body as Record<string, unknown>),

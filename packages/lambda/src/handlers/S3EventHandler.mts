@@ -1,5 +1,3 @@
-import type { ResponseConfig } from "@o3co/js.function-framework.core/executor/Base.mjs";
-import type { Factory as ExecutorFactory } from "@o3co/js.function-framework.core/executor/Factory.mjs";
 import * as PromiseHelper from "@o3co/js.util.misc/async/index.mjs";
 import type {
   Handler,
@@ -11,13 +9,9 @@ import type {
   SQSEvent,
   SQSRecord,
 } from "aws-lambda";
+import type { CreateHandlerParams } from "../types.mjs";
 
-export type CreateHandleParams = {
-  config: Map<string, unknown>;
-  executorFactory: ExecutorFactory;
-  onComplete?: (result: unknown) => Promise<void> | void;
-  onError?: (error: unknown) => Promise<void> | void;
-};
+export type { CreateHandlerParams as CreateHandleParams };
 
 const DefaultHandleParams = {
   onComplete: async (_result: unknown) => {},
@@ -38,7 +32,7 @@ export const createHandler = ({
   executorFactory,
   onComplete = DefaultHandleParams.onComplete,
   onError = DefaultHandleParams.onError,
-}: CreateHandleParams): Handler<S3Event | SQSEvent | SNSEvent> => {
+}: CreateHandlerParams): Handler<S3Event | SQSEvent | SNSEvent> => {
   // handleEvent
   return async (event: S3Event | SQSEvent | SNSEvent) => {
     const isSNSMessage = (event: unknown): event is SNSMessage => {
@@ -54,9 +48,15 @@ export const createHandler = ({
       if (isSNSMessage(event)) {
         const snsMessage = event as SNSMessage;
 
-        return await handleEventOrSnsMessage(
-          JSON.parse(snsMessage.Message) as S3Event,
-        );
+        let parsed: S3Event;
+        try {
+          parsed = JSON.parse(snsMessage.Message) as S3Event;
+        } catch (cause) {
+          throw new Error("Failed to parse SNS message body as S3Event", {
+            cause,
+          });
+        }
+        return await handleEventOrSnsMessage(parsed);
       } else if ((event as S3Event | SQSEvent).Records) {
         const s3RecordsResponse = await PromiseHelper.runSeq(
           (event as S3Event | SQSEvent).Records,
@@ -76,9 +76,16 @@ export const createHandler = ({
 
       if (isSNSRecord(record)) {
         const snsRecord = record as SNSEventRecord;
-        return await handleEventOrSnsMessage(
-          JSON.parse(snsRecord.Sns.Message) as S3Event,
-        );
+        let parsed: S3Event;
+        try {
+          parsed = JSON.parse(snsRecord.Sns.Message) as S3Event;
+        } catch (cause) {
+          throw new Error(
+            "Failed to parse SNS record message as S3Event",
+            { cause },
+          );
+        }
+        return await handleEventOrSnsMessage(parsed);
       } else {
         return await handleRecordForS3OrSQS(
           record as S3EventRecord | SQSRecord,
@@ -95,9 +102,16 @@ export const createHandler = ({
           const sqsRecord = record as SQSRecord;
           const ret = await (async () => {
             try {
-              await handleEventOrSnsMessage(
-                JSON.parse(sqsRecord.body) as SNSMessage,
-              );
+              let parsed: SNSMessage;
+              try {
+                parsed = JSON.parse(sqsRecord.body) as SNSMessage;
+              } catch (cause) {
+                throw new Error(
+                  "Failed to parse SQS record body as SNS message",
+                  { cause },
+                );
+              }
+              await handleEventOrSnsMessage(parsed);
               return { batchItemFailures: [] };
             } catch (_cause) {
               return {
@@ -120,11 +134,15 @@ export const createHandler = ({
      */
     const handleCommandForS3Record = async (record: S3EventRecord) => {
       // Execute command from the configuration
-      const command = config.get("runtime.command") as string;
+      const command = config.runtime?.command;
+      if (!command || typeof command !== "string") {
+        throw new Error("runtime.command is not configured");
+      }
+      const response = config.runtime?.response;
 
       return await (
         await executorFactory.create(command, {
-          response: config.get("runtime.response") as string | ResponseConfig,
+          response,
         })
       ).run({
         ...record,
