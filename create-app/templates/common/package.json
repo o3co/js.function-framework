@@ -1,0 +1,24 @@
+{
+  "name": "{{PROJECT_NAME}}",
+  "version": "0.0.0",
+  "description": "",
+  "license": "MIT",
+  "type": "module",
+  "packageManager": "{{PACKAGE_MANAGER}}",
+  "scripts": {
+    "build": "make build",
+    "debug": "node src/handlers/NodeHandler.mjs",
+    "command": "node src/handlers/NodeHandler.mjs"
+  },
+  "exports": {
+    "./*": "./src/*"
+  },
+  "dependencies": {
+    "@o3co/js.function-framework.core": "0.0.0-snapshot",
+    "@o3co/js.function-framework.node": "0.0.0-snapshot",
+    "@o3co/js.function-framework.lambda": "0.0.0-snapshot",
+    "@o3co/js.util.misc": "0.6.0",
+    "deepmerge": "^4.3.1",
+    "@types/aws-lambda": "^8.10.145"
+  }
+}

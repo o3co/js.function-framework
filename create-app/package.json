@@ -1,0 +1,26 @@
+{
+  "name": "@o3co/create-function-framework",
+  "version": "0.0.0-snapshot",
+  "type": "module",
+  "license": "MIT",
+  "author": "1o1 developer <develop@1o1.co.jp>",
+  "bin": {
+    "create-function-framework": "./built/index.mjs"
+  },
+  "files": ["built/", "templates/"],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "prompts": "^2.4.2"
+  },
+  "devDependencies": {
+    "@types/prompts": "^2.4.9",
+    "@types/node": "24.10.4",
+    "typescript": "5.9.3"
+  }
+}
