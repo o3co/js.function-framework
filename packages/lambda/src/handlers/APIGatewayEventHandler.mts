@@ -10,7 +10,13 @@ import type {
 } from "aws-lambda";
 
 export type CreateHandleParams = {
-  config: Map<string, unknown>;
+  config: {
+    runtime?: {
+      command?: string;
+      response?: string | ({ type?: string } & Record<string, unknown>);
+    };
+    [key: string]: unknown;
+  };
   executorFactory: ExecutorFactory;
   onError?: (error: unknown) => Promise<void> | void;
   onComplete?: (result: unknown) => Promise<void> | void;
@@ -46,7 +52,12 @@ export const createHandler = ({
         event.body && event.isBase64Encoded
           ? Buffer.from(event.body, "base64").toString("utf-8")
           : event.body;
-      return temp ? JSON.parse(temp) : null;
+      if (!temp) return null;
+      try {
+        return JSON.parse(temp);
+      } catch (cause) {
+        throw new Error("Failed to parse request body as JSON", { cause });
+      }
     };
 
     const handleV1Event = async (event: APIGatewayProxyEvent) => {
@@ -125,11 +136,17 @@ export const createHandler = ({
     };
 
     const handleSQSRecord = async (record: SQSRecord) => {
-      return await handleAPIGatewayEvent(
-        JSON.parse(record.body) as
+      let parsed: APIGatewayProxyEvent | APIGatewayProxyEventV2;
+      try {
+        parsed = JSON.parse(record.body) as
           | APIGatewayProxyEvent
-          | APIGatewayProxyEventV2,
-      );
+          | APIGatewayProxyEventV2;
+      } catch (cause) {
+        throw new Error("Failed to parse SQS record body as APIGateway event", {
+          cause,
+        });
+      }
+      return await handleAPIGatewayEvent(parsed);
     };
 
     const handleRequest = async (request: {
@@ -137,11 +154,12 @@ export const createHandler = ({
       queryParams: Record<string, string[]>;
       headers: Record<string, string[]>;
     }) => {
-      const command = config.get("runtime.command") as string;
+      const runtime = (config.runtime ?? {}) as Record<string, unknown>;
+      const command = runtime.command as string;
 
       return await (
         await executorFactory.create(command, {
-          response: config.get("runtime.response") as string | ResponseConfig,
+          response: runtime.response as string | ResponseConfig,
         })
       ).run({
         ...(request.body as Record<string, unknown>),

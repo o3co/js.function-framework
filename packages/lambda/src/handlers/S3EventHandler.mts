@@ -13,7 +13,13 @@ import type {
 } from "aws-lambda";
 
 export type CreateHandleParams = {
-  config: Map<string, unknown>;
+  config: {
+    runtime?: {
+      command?: string;
+      response?: string | ({ type?: string } & Record<string, unknown>);
+    };
+    [key: string]: unknown;
+  };
   executorFactory: ExecutorFactory;
   onComplete?: (result: unknown) => Promise<void> | void;
   onError?: (error: unknown) => Promise<void> | void;
@@ -54,9 +60,15 @@ export const createHandler = ({
       if (isSNSMessage(event)) {
         const snsMessage = event as SNSMessage;
 
-        return await handleEventOrSnsMessage(
-          JSON.parse(snsMessage.Message) as S3Event,
-        );
+        let parsed: S3Event;
+        try {
+          parsed = JSON.parse(snsMessage.Message) as S3Event;
+        } catch (cause) {
+          throw new Error("Failed to parse SNS message body as S3Event", {
+            cause,
+          });
+        }
+        return await handleEventOrSnsMessage(parsed);
       } else if ((event as S3Event | SQSEvent).Records) {
         const s3RecordsResponse = await PromiseHelper.runSeq(
           (event as S3Event | SQSEvent).Records,
@@ -76,9 +88,16 @@ export const createHandler = ({
 
       if (isSNSRecord(record)) {
         const snsRecord = record as SNSEventRecord;
-        return await handleEventOrSnsMessage(
-          JSON.parse(snsRecord.Sns.Message) as S3Event,
-        );
+        let parsed: S3Event;
+        try {
+          parsed = JSON.parse(snsRecord.Sns.Message) as S3Event;
+        } catch (cause) {
+          throw new Error(
+            "Failed to parse SNS record message as S3Event",
+            { cause },
+          );
+        }
+        return await handleEventOrSnsMessage(parsed);
       } else {
         return await handleRecordForS3OrSQS(
           record as S3EventRecord | SQSRecord,
@@ -95,9 +114,16 @@ export const createHandler = ({
           const sqsRecord = record as SQSRecord;
           const ret = await (async () => {
             try {
-              await handleEventOrSnsMessage(
-                JSON.parse(sqsRecord.body) as SNSMessage,
-              );
+              let parsed: SNSMessage;
+              try {
+                parsed = JSON.parse(sqsRecord.body) as SNSMessage;
+              } catch (cause) {
+                throw new Error(
+                  "Failed to parse SQS record body as SNS message",
+                  { cause },
+                );
+              }
+              await handleEventOrSnsMessage(parsed);
               return { batchItemFailures: [] };
             } catch (_cause) {
               return {
@@ -120,11 +146,12 @@ export const createHandler = ({
      */
     const handleCommandForS3Record = async (record: S3EventRecord) => {
       // Execute command from the configuration
-      const command = config.get("runtime.command") as string;
+      const runtime = (config.runtime ?? {}) as Record<string, unknown>;
+      const command = runtime.command as string;
 
       return await (
         await executorFactory.create(command, {
-          response: config.get("runtime.response") as string | ResponseConfig,
+          response: runtime.response as string | ResponseConfig,
         })
       ).run({
         ...record,
